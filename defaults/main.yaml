@@ -54,3 +54,7 @@ sanoid_templates: "{{ sanoid_example_templates }}"
 
 sanoid_conf_dir: /etc/sanoid
 sanoid_conf: "{{ sanoid_conf_dir }}/sanoid.conf"
+
+syncoid_syncs: []
+syncoid_service_name: syncoid
+syncoid_timer_frequency: hourly

@@ -27,3 +27,26 @@
     name: sanoid.timer
     state: started
     enabled: yes
+
+- name: generate syncoid systemd service
+  ansible.builtin.template:
+    src: ../templates/syncoid.service.j2
+    dest: "/usr/lib/systemd/system/{{ syncoid_service_name }}.service"
+    owner: root
+    group: root
+    mode: '0700'
+
+- name: generate syncoid systemd timer
+  ansible.builtin.template:
+    src: ../templates/syncoid.timer.j2
+    dest: "/usr/lib/systemd/system/{{ syncoid_service_name }}.timer"
+    owner: root
+    group: root
+    mode: '0700'
+
+- name: enable syncoid timer
+  ansible.builtin.systemd:
+    name: "{{ syncoid_service_name }}.timer"
+    state: started
+    enabled: yes
+    daemon_reload: yes
