@@ -1,0 +1,7 @@
+---
+- name: install sanoid with package manager
+  become: true
+  package:
+    name: sanoid
+    state: present
+    update_cache: true
