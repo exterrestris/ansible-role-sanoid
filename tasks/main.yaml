@@ -9,7 +9,7 @@
     owner: root
     group: root
 
-- name: generate config
+- name: generate sanoid config
   ansible.builtin.template:
     src: ../templates/sanoid.conf.j2
     dest: "{{ sanoid_conf }}"
