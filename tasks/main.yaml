@@ -1,6 +1,6 @@
 ---
 - name: include install tasks
-  import_tasks: "{{ sanoid_install_source }}.yaml"
+  import_tasks: "install-{{ sanoid_install_source }}.yaml"
 
 - name: create config directory
   file:
