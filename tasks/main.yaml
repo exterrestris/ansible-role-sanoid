@@ -28,6 +28,43 @@
     state: started
     enabled: yes
 
+- name: set up SSH keys
+  block:
+    - name: generate SSH key
+      ansible.builtin.user:
+        name: root
+        generate_ssh_key: yes
+        ssh_key_bits: 2048
+        ssh_key_file: ".ssh/{{ syncoid_generated_ssh_key }}"
+      register: "user_info"
+      when: syncoid_generate_ssh_key
+      
+    - name: add generated key to authorized_keys
+      ansible.posix.authorized_key:
+        user: "{{ item.dest_user | default('root') }}"
+        state: present
+        key: "{{ user_info.ssh_public_key }}"
+      delegate_to: "{{ item.dest_host }}"
+      when:
+        - item.dest_host is defined
+        - syncoid_generate_ssh_key
+      with_items:
+        - "{{ syncoid_syncs }}"
+      
+    - name: add generated key to authorized_keys
+      ansible.posix.authorized_key:
+        user: "{{ item.dest_user | default('root') }}"
+        state: present
+        key: "{{ lookup('file', syncoid_ssh_key) }}"
+      delegate_to: "{{ item.dest_host }}"
+      when:
+        - item.dest_host is defined
+        - not syncoid_generate_ssh_key
+      with_items:
+        - "{{ syncoid_syncs }}"
+  when:
+    - syncoid_syncs | length > 0
+
 - name: set up syncoid systemd service
   block:
     - name: generate syncoid service unit file

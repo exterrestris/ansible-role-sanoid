@@ -22,3 +22,15 @@ syncoid_service_name: syncoid
 
 # systemd timer frequency
 syncoid_timer_frequency: daily
+
+# Use an SSH key to connect to remote hosts
+syncoid_use_ssh_key: yes
+
+# Generate a new SSH key for use by syncoid
+syncoid_generate_ssh_key: yes
+
+# Name of generated SSH key
+syncoid_generated_ssh_key: id_syncoid
+
+# Path to SSH key
+syncoid_ssh_key: "/root/.ssh/{{ syncoid_generated_ssh_key if syncoid_generate_ssh_key else 'id_rsa' }}"
