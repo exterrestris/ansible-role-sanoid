@@ -1,0 +1,26 @@
+[Unit]
+Description=Replicate sanoid snapshots
+Requires=zfs.target
+After=zfs.target
+
+[Service]
+Type=oneshot
+{% for sync in syncoid_syncs %}
+ExecStart=/usr/sbin/syncoid \
+{% if sync.force_delete | default(False) %}
+  --force-delete \
+{% endif %}
+{% if sync.recursive | default(False) %}
+  --recursive \
+{% endif %}
+{% if sync.src_host | default('') %}
+  {{ sync.src_user | default('root') }}@{{ sync.src_host }}:{{ sync.src | mandatory }} \
+{% else %}
+  {{ sync.src }} \
+{% endif %}
+{% if sync.dest_host | default('') %}
+  {{ sync.dest_user | default('root') }}@{{ sync.dest_host }}:{{ sync.dest | mandatory }}
+{% else %}
+  {{ sync.dest }}
+{% endif %}
+{% endfor %}

@@ -1,0 +1,48 @@
+---
+# Example templates from https://github.com/jimsalterjrs/sanoid/blob/master/sanoid.conf
+sanoid_example_templates:
+  - name: demo
+    daily: 60
+  - name: production
+    frequently: 0
+    hourly: 36
+    daily: 30
+    monthly: 3
+    yearly: 0
+    autosnap: 'yes'
+    autoprune: 'yes'
+  - name: backup
+    autoprune: 'yes'
+    frequently: 0
+    hourly: 30
+    daily: 90
+    monthly: 12
+    yearly: 0
+    autosnap: 'no'
+    hourly_warn: 2880
+    hourly_crit: 3600
+    daily_warn: 48
+    daily_crit: 60
+  - name: hotspare
+    autoprune: 'yes'
+    frequently: 0
+    hourly: 30
+    daily: 90
+    monthly: 3
+    yearly: 0
+    autosnap: 'no'
+    hourly_warn: 4h
+    hourly_crit: 6h
+    daily_warn: 2d
+    daily_crit: 4d
+  - name: scripts
+    pre_snapshot_script: /path/to/script.sh
+    post_snapshot_script: /path/to/script.sh
+    pruning_script: /path/to/script.sh
+    no_inconsistent_snapshot: 'yes'
+    force_post_snapshot_script: 'yes'
+    script_timeout: 5
+  - name: ignore
+    autoprune: no
+    autosnap: no
+    monitor: no
