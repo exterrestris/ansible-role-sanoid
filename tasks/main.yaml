@@ -50,3 +50,12 @@
     state: started
     enabled: yes
     daemon_reload: yes
+  when: syncoid_syncs | length > 0
+
+- name: disable syncoid timer
+  ansible.builtin.systemd:
+    name: "{{ syncoid_service_name }}.timer"
+    state: stopped
+    enabled: no
+    daemon_reload: yes
+  when: syncoid_syncs | length == 0
