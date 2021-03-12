@@ -48,6 +48,16 @@
       when: item.dest_host is defined
       with_items:
         - "{{ syncoid_syncs }}"
+
+    - name: add SSH key to source authorized_keys
+      ansible.posix.authorized_key:
+        user: "{{ item.src_user | default('root') }}"
+        state: present
+        key: "{{ user_info.ssh_public_key if syncoid_generate_ssh_key else lookup('file', syncoid_ssh_key) }}"
+      delegate_to: "{{ item.src_host }}"
+      when: item.src_host is defined
+      with_items:
+        - "{{ syncoid_syncs }}"
   when:
     - syncoid_syncs | length > 0
 
