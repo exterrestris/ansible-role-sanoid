@@ -16,3 +16,14 @@
     owner: root
     group: root
     mode: '0700'
+
+- name: enable sanoid prune service
+  ansible.builtin.systemd:
+    name: sanoid-prune.service
+    enabled: yes
+
+- name: enable sanoid timer
+  ansible.builtin.systemd:
+    name: sanoid.timer
+    state: started
+    enabled: yes
