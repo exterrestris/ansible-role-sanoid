@@ -1,2 +1,8 @@
 ---
 sanoid_install_source: package
+
+sanoid_datasets: []
+
+sanoid_templates: []
+
+sanoid_conf: /etc/sanoid/sanoid.conf
