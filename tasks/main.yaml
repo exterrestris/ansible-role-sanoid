@@ -28,34 +28,51 @@
     state: started
     enabled: yes
 
-- name: generate syncoid systemd service
-  ansible.builtin.template:
-    src: ../templates/syncoid.service.j2
-    dest: "/usr/lib/systemd/system/{{ syncoid_service_name }}.service"
-    owner: root
-    group: root
-    mode: '0700'
-
-- name: generate syncoid systemd timer
-  ansible.builtin.template:
-    src: ../templates/syncoid.timer.j2
-    dest: "/usr/lib/systemd/system/{{ syncoid_service_name }}.timer"
-    owner: root
-    group: root
-    mode: '0700'
-
-- name: enable syncoid timer
-  ansible.builtin.systemd:
-    name: "{{ syncoid_service_name }}.timer"
-    state: started
-    enabled: yes
-    daemon_reload: yes
+- name: set up syncoid systemd service
+  block:
+    - name: generate syncoid service unit file
+      ansible.builtin.template:
+        src: ../templates/syncoid.service.j2
+        dest: "/usr/lib/systemd/system/{{ syncoid_service_name }}.service"
+        owner: root
+        group: root
+        mode: '0700'
+    - name: generate syncoid timer unit file
+      ansible.builtin.template:
+        src: ../templates/syncoid.timer.j2
+        dest: "/usr/lib/systemd/system/{{ syncoid_service_name }}.timer"
+        owner: root
+        group: root
+        mode: '0700'
+    - name: enable syncoid timer
+      ansible.builtin.systemd:
+        name: "{{ syncoid_service_name }}.timer"
+        state: started
+        enabled: yes
+        daemon_reload: yes
   when: syncoid_syncs | length > 0
 
-- name: disable syncoid timer
-  ansible.builtin.systemd:
-    name: "{{ syncoid_service_name }}.timer"
-    state: stopped
-    enabled: no
-    daemon_reload: yes
+- name: remove syncoid service
+  block:
+    - name: check service exists
+      stat:
+        path: "/usr/lib/systemd/system/{{ syncoid_service_name }}.timer"
+      register: service_exists
+    - name: disable syncoid timer
+      ansible.builtin.systemd:
+        name: "{{ syncoid_service_name }}.timer"
+        state: stopped
+        enabled: no
+      when: service_exists.stat.exists
+    - name: remove syncoid service unit file
+      file:
+        dest: "/usr/lib/systemd/system/{{ syncoid_service_name }}.service"
+        state: absent
+    - name: remove syncoid timer unit file
+      file:
+        dest: "/usr/lib/systemd/system/{{ syncoid_service_name }}.timer"
+        state: absent
+    - name: reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: yes
   when: syncoid_syncs | length == 0
