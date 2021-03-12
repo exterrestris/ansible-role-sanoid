@@ -1,0 +1,8 @@
+sanoid_build_prerequisites:
+  - debhelper
+  - libcapture-tiny-perl
+  - libconfig-inifiles-perl
+  - pv
+  - lzop
+  - mbuffer
+  - build-essential

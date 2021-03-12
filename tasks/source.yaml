@@ -1,0 +1,6 @@
+---
+- name: install build prerequisites
+  ansible.builtin.package:
+    name: powerline
+    state: present
+  with_items: "sanoid_build_prerequisites"

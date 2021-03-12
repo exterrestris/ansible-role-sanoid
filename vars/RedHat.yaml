@@ -1,0 +1,10 @@
+sanoid_build_prerequisites:
+  - epel-release
+  - git
+  - perl-Config-IniFiles
+  - perl-Data-Dumper
+  - perl-Capture-Tiny
+  - lzop
+  - mbuffer
+  - mhash
+  - pv
