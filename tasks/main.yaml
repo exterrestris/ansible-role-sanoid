@@ -2,6 +2,13 @@
 - name: include install tasks
   import_tasks: "{{ sanoid_install_source }}.yaml"
 
+- name: create config directory
+  file:
+    dest: "{{ sanoid_conf_dir }}"
+    state: directory
+    owner: root
+    group: root
+
 - name: generate config
   ansible.builtin.template:
     src: ../templates/sanoid.conf.j2

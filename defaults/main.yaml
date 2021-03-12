@@ -52,4 +52,5 @@ sanoid_example_templates:
 
 sanoid_templates: "{{ sanoid_example_templates }}"
 
-sanoid_conf: /etc/sanoid/sanoid.conf
+sanoid_conf_dir: /etc/sanoid
+sanoid_conf: "{{ sanoid_conf_dir }}/sanoid.conf"
