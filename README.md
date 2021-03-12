@@ -7,6 +7,8 @@ An Ansible role to install and configure automated ZFS snapshots and replication
 - Sanoid package available in distribution
 - systemd
 
+In order for Syncoid to replicate to a remote host, you must ensure that SSH access via public key authentication is correctly set up for the relevant users
+
 ## Role Variables
 
 ### Configuration
