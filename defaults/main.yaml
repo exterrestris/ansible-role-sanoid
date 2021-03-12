@@ -1,13 +1,24 @@
 ---
+# Install method
 sanoid_install_source: package
 
+# Datasets to snapshot
 sanoid_datasets: []
 
+# Snapshot templates
 sanoid_templates: "{{ sanoid_example_templates }}"
 
+# Configuration directory
 sanoid_conf_dir: /etc/sanoid
+
+# Configuration file path
 sanoid_conf: "{{ sanoid_conf_dir }}/sanoid.conf"
 
+# Replication pairs
 syncoid_syncs: []
+
+# systemd service name
 syncoid_service_name: syncoid
+
+# systemd timer frequency
 syncoid_timer_frequency: hourly

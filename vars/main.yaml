@@ -1,3 +1,5 @@
+---
+# Example templates from https://github.com/jimsalterjrs/sanoid/blob/master/sanoid.conf
 sanoid_example_templates:
   - name: demo
     daily: 60
