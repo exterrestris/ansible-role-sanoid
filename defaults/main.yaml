@@ -21,4 +21,4 @@ syncoid_syncs: []
 syncoid_service_name: syncoid
 
 # systemd timer frequency
-syncoid_timer_frequency: hourly
+syncoid_timer_frequency: daily

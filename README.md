@@ -18,7 +18,7 @@ In order for Syncoid to replicate to a remote host, you must ensure that SSH acc
 | `sanoid_templates`        | Example templates from [sanoid.conf](https://github.com/jimsalterjrs/sanoid/blob/master/sanoid.conf) | List of policy templates |
 | `syncoid_syncs`           | `[]`         | List of datasets to replicate         |
 | `syncoid_service_name`    | `"syncoid"`  | systemd service name for Syncoid      |
-| `syncoid_timer_frequency` | `"hourly"`   | systemd service frequency for Syncoid |
+| `syncoid_timer_frequency` | `"daily"`    | systemd service frequency for Syncoid |
 
 #### `sanoid_templates[]`
 | Variable     | Default    | Comments       |
