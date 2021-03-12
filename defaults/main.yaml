@@ -32,5 +32,11 @@ syncoid_generate_ssh_key: yes
 # Name of generated SSH key
 syncoid_generated_ssh_key: id_syncoid
 
+# Type of generated SSH key
+syncoid_generated_ssh_key_type: 'rsa'
+
+# Number of bits of generated SSH key
+syncoid_generated_ssh_key_bits: 2048
+
 # Path to SSH key
 syncoid_ssh_key: "/root/.ssh/{{ syncoid_generated_ssh_key if syncoid_generate_ssh_key else 'id_rsa' }}"

@@ -34,7 +34,8 @@
       ansible.builtin.user:
         name: root
         generate_ssh_key: yes
-        ssh_key_bits: 2048
+        ssh_key_type: "{{ syncoid_generated_ssh_key_type }}"
+        ssh_key_bits: "{{ syncoid_generated_ssh_key_bits }}"
         ssh_key_file: ".ssh/{{ syncoid_generated_ssh_key }}"
       register: "user_info"
       when: syncoid_generate_ssh_key
