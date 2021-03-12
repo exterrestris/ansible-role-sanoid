@@ -39,27 +39,13 @@
       register: "user_info"
       when: syncoid_generate_ssh_key
       
-    - name: add generated key to authorized_keys
+    - name: add SSH key to destination authorized_keys
       ansible.posix.authorized_key:
         user: "{{ item.dest_user | default('root') }}"
         state: present
-        key: "{{ user_info.ssh_public_key }}"
+        key: "{{ user_info.ssh_public_key if syncoid_generate_ssh_key else lookup('file', syncoid_ssh_key) }}"
       delegate_to: "{{ item.dest_host }}"
-      when:
-        - item.dest_host is defined
-        - syncoid_generate_ssh_key
-      with_items:
-        - "{{ syncoid_syncs }}"
-      
-    - name: add generated key to authorized_keys
-      ansible.posix.authorized_key:
-        user: "{{ item.dest_user | default('root') }}"
-        state: present
-        key: "{{ lookup('file', syncoid_ssh_key) }}"
-      delegate_to: "{{ item.dest_host }}"
-      when:
-        - item.dest_host is defined
-        - not syncoid_generate_ssh_key
+      when: item.dest_host is defined
       with_items:
         - "{{ syncoid_syncs }}"
   when:
