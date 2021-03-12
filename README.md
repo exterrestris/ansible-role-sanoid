@@ -18,7 +18,7 @@ An Ansible role to install and configure automated ZFS snapshots and replication
 | `syncoid_service_name`    | `"syncoid"`  | systemd service name for Syncoid      |
 | `syncoid_timer_frequency` | `"hourly"`   | systemd service frequency for Syncoid |
 
-### `sanoid_templates`
+#### `sanoid_templates[]`
 | Variable     | Default    | Comments       |
 | :---         | :---       | :---           |
 | `name`       | *Required* | Template name  |
@@ -26,7 +26,7 @@ An Ansible role to install and configure automated ZFS snapshots and replication
 
 All settings supported by Sanoid in templates are supported - see [sanoid.conf](https://github.com/jimsalterjrs/sanoid/blob/master/sanoid.conf) and [sanoid.defaults.conf](https://github.com/jimsalterjrs/sanoid/blob/master/sanoid.defaults.conf) for details
 
-### `sanoid_datasets`
+#### `sanoid_datasets[]`
 | Variable                | Default    | Comments                                 |
 | :---                    | :---       | :---                                     |
 | `name`                  | *Required* | ZFS dataset to snapshot                  |
@@ -35,7 +35,7 @@ All settings supported by Sanoid in templates are supported - see [sanoid.conf](
 | `process_children_only` | `"no"`     | Do not include this dataset              |
 | `overrides`             | `[]`       | List of template settings to override    |
 
-### `syncoid_syncs`
+#### `syncoid_syncs[]`
 | Variable       | Default    | Comments                                       |
 | :---           | :---       | :---                                           |
 | `src`          | *Required* | Source ZFS dataset                             |
