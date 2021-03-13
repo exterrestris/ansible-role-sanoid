@@ -1,4 +1,4 @@
-sanoid_build_prerequisites:
+sanoid_prerequisites:
   - debhelper
   - libcapture-tiny-perl
   - libconfig-inifiles-perl

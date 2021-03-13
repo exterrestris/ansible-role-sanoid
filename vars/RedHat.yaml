@@ -1,4 +1,4 @@
-sanoid_build_prerequisites:
+sanoid_prerequisites:
   - epel-release
   - git
   - perl-Config-IniFiles
