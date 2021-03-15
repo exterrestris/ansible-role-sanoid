@@ -9,6 +9,19 @@ An Ansible role to install and configure automated ZFS snapshots and replication
 
 ## Role Variables
 
+### Installation
+| Variable              | Default     | Comments                                      |
+| :---                  | :---        | :---                                          |
+| `sanoid_install_from` | `"package"` | Install Sanoid from OS package or from GitHub |
+
+#### Install from source
+| Variable                       | Default       | Comments                           |
+| :---                           | :---          | :---                               |
+| `sanoid_source_github_url`     | https://github.com/jimsalterjrs/sanoid | GitHub repo to clone |
+| `sanoid_source_version`        | `latest`      | Git branch, tag or commit to checkout. `latest` will select the most recent release |
+| `sanoid_source_download_dir`   | `/tmp/sanoid` | Directory to clone repo to         |
+| `sanoid_source_remove_package` | `yes`         | Remove the OS package if installed |
+
 ### Configuration
 | Variable                  | Default      | Comments                              |
 | :---                      | :---         | :---                                  |
