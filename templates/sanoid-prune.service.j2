@@ -7,7 +7,7 @@ ConditionFileNotEmpty={{ sanoid_conf }}
 [Service]
 Environment=TZ=UTC
 Type=oneshot
-ExecStart={{ sanoid_bin_path }} --prune-snapshots --verbose
+ExecStart={{ sanoid_path | default(sanoid_bin_path) }} --prune-snapshots --verbose
 
 [Install]
 WantedBy=sanoid.service

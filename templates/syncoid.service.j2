@@ -6,7 +6,7 @@ After=zfs.target
 [Service]
 Type=oneshot
 {% for sync in syncoid_syncs %}
-ExecStart={{ syncoid_bin_path }} \
+ExecStart={{ syncoid_path | default(syncoid_bin_path) }} \
 {% if sync.force_delete | default(False) %}
   --force-delete \
 {% endif %}
