@@ -1,5 +1,5 @@
 ---
-# Install method
+# Install method: package or source
 sanoid_install_from: package
 
 # Github Repo URL
