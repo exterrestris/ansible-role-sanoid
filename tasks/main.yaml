@@ -55,26 +55,7 @@
   when: syncoid_syncs | length > 0
 
 - name: remove syncoid service
-  block:
-    - name: check service exists
-      stat:
-        path: "/usr/lib/systemd/system/{{ syncoid_service_name }}.timer"
-      register: service_exists
-    - name: disable syncoid timer
-      ansible.builtin.systemd:
-        name: "{{ syncoid_service_name }}.timer"
-        state: stopped
-        enabled: no
-      when: service_exists.stat.exists
-    - name: remove syncoid service unit file
-      file:
-        dest: "/usr/lib/systemd/system/{{ syncoid_service_name }}.service"
-        state: absent
-    - name: remove syncoid timer unit file
-      file:
-        dest: "/usr/lib/systemd/system/{{ syncoid_service_name }}.timer"
-        state: absent
-    - name: reload systemd
-      ansible.builtin.systemd:
-        daemon_reload: yes
+  import_tasks: "systemd-remove.yaml"
+  vars:
+    systemd_service_name: "{{ syncoid_service_name }}"
   when: syncoid_syncs | length == 0

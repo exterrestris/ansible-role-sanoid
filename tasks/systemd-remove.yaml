@@ -1,0 +1,28 @@
+---
+- name: check systemd service exists
+  stat:
+    path: "/usr/lib/systemd/system/{{ systemd_service_name }}.service"
+  register: service_exists
+- block:
+    - name: check if systemd service has timer
+      stat:
+        path: "/usr/lib/systemd/system/{{ systemd_service_name }}.timer"
+      register: timer_exists
+    - name: disable systemd service
+      ansible.builtin.systemd:
+        name: "{{ systemd_service_name }}.{{ 'timer' if timer_exists.stat.exists else 'service' }}"
+        state: stopped
+        enabled: no
+    - name: remove systemd timer unit file
+      file:
+        dest: "/usr/lib/systemd/system/{{ systemd_service_name }}.timer"
+        state: absent
+      when: timer_exists.stat.exists
+    - name: remove systemd service unit file
+      file:
+        dest: "/usr/lib/systemd/system/{{ systemd_service_name }}.service"
+        state: absent
+    - name: reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: yes
+  when: service_exists.stat.exists
