@@ -8,7 +8,7 @@
         name: sanoid
         state: absent
       when: ansible_facts.packages['sanoid'] is defined
-  when: sanoid_remove_package
+  when: sanoid_source_remove_package
 
 - name: install prerequisites
   ansible.builtin.package:
@@ -22,24 +22,24 @@
   block:
   - name: get latest release versiom from GitHub
     uri:
-      url: "{{ sanoid_github_source_url }}/releases/latest"
+      url: "{{ sanoid_source_github_url }}/releases/latest"
     register: sanoid_github_release_page
   - name: Set latest version fact
     set_fact:
-      sanoid_version: "{{ sanoid_github_release_page['url'].split('/')[-1] }}"
-  when: sanoid_version == "latest"
+      sanoid_source_version: "{{ sanoid_github_release_page['url'].split('/')[-1] }}"
+  when: sanoid_source_version == "latest"
 
 - name: clone GitHub repo
   git:
-    repo: "{{ sanoid_github_source_url }}"
-    dest: "{{ sanoid_download_dir }}"
-    version: "{{ sanoid_version }}"
+    repo: "{{ sanoid_source_github_url }}"
+    dest: "{{ sanoid_source_download_dir }}"
+    version: "{{ sanoid_source_version }}"
     update: yes
     force: yes
 
 - name: copy binaries
   copy:
-    src: "{{ sanoid_download_dir }}/{{ item }}"
+    src: "{{ sanoid_source_download_dir }}/{{ item }}"
     dest: /usr/local/sbin
     remote_src: yes
     mode: '0700'

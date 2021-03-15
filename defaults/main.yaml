@@ -3,16 +3,16 @@
 sanoid_install_from: package
 
 # Github Repo URL
-sanoid_github_source_url: https://github.com/jimsalterjrs/sanoid
+sanoid_source_github_url: https://github.com/jimsalterjrs/sanoid
 
 # Download directory
-sanoid_download_dir: /tmp/sanoid
+sanoid_source_download_dir: /tmp/sanoid
 
 # Version to install: "latest", specific tag or branch
-sanoid_version: latest
+sanoid_source_version: latest
 
 # Remove sanoid package when installing from source
-sanoid_remove_package: yes
+sanoid_source_remove_package: yes
 
 # Datasets to snapshot
 sanoid_datasets: []
