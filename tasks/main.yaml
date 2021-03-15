@@ -27,12 +27,14 @@
 - name: enable sanoid prune service
   ansible.builtin.systemd:
     name: sanoid-prune.service
+    masked: no
     enabled: yes
 
 - name: enable sanoid timer
   ansible.builtin.systemd:
     name: sanoid.timer
     state: started
+    masked: no
     enabled: yes
 
 - name: set up syncoid systemd service
@@ -48,6 +50,7 @@
         name: "{{ syncoid_service_name }}.timer"
         state: started
         enabled: yes
+        masked: no
         daemon_reload: yes
   when: syncoid_syncs | length > 0
 
