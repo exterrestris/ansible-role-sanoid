@@ -1,4 +1,15 @@
 ---
+- name: check if package installed
+  block:
+    - name: get installed packages
+      ansible.builtin.package_facts:
+    - name: remove package
+      ansible.builtin.package:
+        name: sanoid
+        state: absent
+      when: ansible_facts.packages['sanoid'] is defined
+  when: sanoid_remove_package
+
 - name: install prerequisites
   ansible.builtin.package:
     name: powerline

@@ -11,6 +11,9 @@ sanoid_download_dir: /tmp/sanoid
 # Version to install: "latest", specific tag or branch
 sanoid_version: latest
 
+# Remove sanoid package when installing from source
+sanoid_remove_package: yes
+
 # Datasets to snapshot
 sanoid_datasets: []
 
