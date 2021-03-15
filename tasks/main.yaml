@@ -84,7 +84,9 @@
         state: started
         enabled: yes
         daemon_reload: yes
-  when: syncoid_syncs | length > 0
+  when:
+    - syncoid_syncs is not none
+    - syncoid_syncs | length > 0
 
 - name: remove syncoid service
   block:
@@ -109,4 +111,4 @@
     - name: reload systemd
       ansible.builtin.systemd:
         daemon_reload: yes
-  when: syncoid_syncs | length == 0
+  when: (syncoid_syncs is none) or (syncoid_syncs | length == 0)
