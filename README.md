@@ -22,6 +22,7 @@ In order for Syncoid to replicate to a remote host, you must ensure that SSH acc
 | `sanoid_source_github_url` | https://github.com/jimsalterjrs/sanoid | GitHub repo to clone |
 | `sanoid_source_version` | `latest` | Git branch, tag or commit to checkout. `latest` will select the most recent release |
 | `sanoid_source_download_dir` | `/tmp/sanoid` | Directory to clone repo to |
+| `sanoid_source_install_dir` | `/usr/local/sbin` | Directory to install binaries to |
 | `sanoid_source_remove_package` | `yes` | Remove the OS package if installed |
 
 ### Configuration

@@ -8,6 +8,9 @@ sanoid_source_github_url: https://github.com/jimsalterjrs/sanoid
 # Download directory
 sanoid_source_download_dir: /tmp/sanoid
 
+# Install directory
+sanoid_source_install_dir: /usr/local/sbin
+
 # Version to install: "latest", specific tag or branch
 sanoid_source_version: latest
 

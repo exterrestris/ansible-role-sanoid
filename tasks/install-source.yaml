@@ -40,7 +40,7 @@
 - name: copy binaries
   copy:
     src: "{{ sanoid_source_download_dir }}/{{ item }}"
-    dest: /usr/local/sbin
+    dest: "{{ sanoid_source_install_dir }}"
     remote_src: yes
     mode: '0700'
   become: true
