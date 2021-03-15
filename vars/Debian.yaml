@@ -5,3 +5,6 @@ sanoid_prerequisites:
   - lzop
   - mbuffer
   - build-essential
+
+sanoid_bin_path: /usr/sbin/sanoid
+syncoid_bin_path: /usr/sbin/syncoid

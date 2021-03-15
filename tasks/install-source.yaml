@@ -50,6 +50,11 @@
     - findoid
     - sleepymutex
 
+- name: set paths to binaries
+  set_fact:
+    sanoid_bin_path: "{{ sanoid_source_install_dir }}/sanoid"
+    syncoid_bin_path: "{{ sanoid_source_install_dir }}/syncoid"
+
 - name: set up sanoid-prune systemd service
   import_tasks: "systemd-add.yaml"
   vars:

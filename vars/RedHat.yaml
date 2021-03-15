@@ -8,3 +8,6 @@ sanoid_prerequisites:
   - mbuffer
   - mhash
   - pv
+
+sanoid_bin_path: /usr/sbin/sanoid
+syncoid_bin_path: /usr/sbin/syncoid
