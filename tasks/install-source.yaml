@@ -26,3 +26,15 @@
     update: yes
     force: yes
 
+- name: copy binaries
+  copy:
+    src: "{{ sanoid_download_dir }}/{{ item }}"
+    dest: /usr/local/sbin
+    remote_src: yes
+    mode: '0700'
+  become: true
+  with_items:
+    - sanoid
+    - syncoid
+    - findoid
+    - sleepymutex
