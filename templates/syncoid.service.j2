@@ -13,6 +13,9 @@ ExecStart=/usr/sbin/syncoid \
 {% if sync.recursive | default(False) %}
   --recursive \
 {% endif %}
+{% if syncoid_use_ssh_key | default(False) %}
+  --sshkey {{ syncoid_ssh_key }} \
+{% endif %}
 {% if sync.src_host | default('') %}
   {{ sync.src_user | default('root') }}@{{ sync.src_host }}:{{ sync.src | mandatory }} \
 {% else %}

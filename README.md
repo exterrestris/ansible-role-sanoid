@@ -7,6 +7,8 @@ An Ansible role to install and configure automated ZFS snapshots and replication
 - Sanoid package available in distribution
 - systemd
 
+In order for Syncoid to replicate to a remote host, you must ensure that SSH access via public key authentication is correctly set up for the relevant users
+
 ## Role Variables
 
 ### Installation
@@ -23,13 +25,11 @@ An Ansible role to install and configure automated ZFS snapshots and replication
 | `sanoid_source_remove_package` | `yes`         | Remove the OS package if installed |
 
 ### Configuration
-| Variable                  | Default      | Comments                              |
-| :---                      | :---         | :---                                  |
-| `sanoid_datasets`         | `[]`         | List of datasets to snapshot          |
-| `sanoid_templates`        | Example templates from [sanoid.conf](https://github.com/jimsalterjrs/sanoid/blob/master/sanoid.conf) | List of policy templates |
-| `syncoid_syncs`           | `[]`         | List of datasets to replicate         |
-| `syncoid_service_name`    | `"syncoid"`  | systemd service name for Syncoid      |
-| `syncoid_timer_frequency` | `"hourly"`   | systemd service frequency for Syncoid |
+| Variable           | Default | Comments                      |
+| :---               | :---    | :---                          |
+| `sanoid_datasets`  | `[]`    | List of datasets to snapshot  |
+| `sanoid_templates` | Example templates from [sanoid.conf](https://github.com/jimsalterjrs/sanoid/blob/master/sanoid.conf) | List of policy templates |
+| `syncoid_syncs`    | `[]`    | List of datasets to replicate |
 
 #### `sanoid_templates[]`
 | Variable     | Default    | Comments       |
@@ -59,6 +59,16 @@ All settings supported by Sanoid in templates are supported - see [sanoid.conf](
 | `dest_user`    | `"root"`   | Destination user. Ignored if `dest_host` empty |
 | `recursive`    | `"no"`     | Copy child datasets                            |
 | `force_delete` | `"no"`     | Remove destination datasets recursively        |
+
+### Syncoid systemd Settings
+| Variable                    | Default         | Comments                                |
+| :---                        | :---            | :---                                    |
+| `syncoid_service_name`      | `"syncoid"`     | systemd service name for Syncoid        |
+| `syncoid_timer_frequency`   | `"daily"`       | systemd service frequency for Syncoid   |
+| `syncoid_use_ssh_key`       | `yes`           | Use an SSH key to login to remote hosts | 
+| `syncoid_generate_ssh_key`  | `yes`           | Generate an SSH key for Syncoid to use  | 
+| `syncoid_generated_ssh_key` | `id_syncoid`    | Name of generated SSH key               | 
+| `syncoid_ssh_key`           | `/root/.ssh/{`*`syncoid_generated_ssh_key`*`\|id_rsa}` | Path to SSH key for Syncoid to use | 
 
 ## Example
 

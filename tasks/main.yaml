@@ -37,6 +37,40 @@
     masked: no
     enabled: yes
 
+- name: set up SSH keys
+  block:
+    - name: generate SSH key
+      ansible.builtin.user:
+        name: root
+        generate_ssh_key: yes
+        ssh_key_type: "{{ syncoid_generated_ssh_key_type }}"
+        ssh_key_bits: "{{ syncoid_generated_ssh_key_bits }}"
+        ssh_key_file: ".ssh/{{ syncoid_generated_ssh_key }}"
+      register: "user_info"
+      when: syncoid_generate_ssh_key
+      
+    - name: add SSH key to destination authorized_keys
+      ansible.posix.authorized_key:
+        user: "{{ item.dest_user | default('root') }}"
+        state: present
+        key: "{{ user_info.ssh_public_key if syncoid_generate_ssh_key else lookup('file', syncoid_ssh_key) }}"
+      delegate_to: "{{ item.dest_host }}"
+      when: item.dest_host is defined
+      with_items:
+        - "{{ syncoid_syncs }}"
+
+    - name: add SSH key to source authorized_keys
+      ansible.posix.authorized_key:
+        user: "{{ item.src_user | default('root') }}"
+        state: present
+        key: "{{ user_info.ssh_public_key if syncoid_generate_ssh_key else lookup('file', syncoid_ssh_key) }}"
+      delegate_to: "{{ item.src_host }}"
+      when: item.src_host is defined
+      with_items:
+        - "{{ syncoid_syncs }}"
+  when:
+    - syncoid_syncs | length > 0
+
 - name: set up syncoid systemd service
   block:
     - name: set up syncoid systemd service
@@ -52,10 +86,12 @@
         enabled: yes
         masked: no
         daemon_reload: yes
-  when: syncoid_syncs | length > 0
+  when:
+    - syncoid_syncs is not none
+    - syncoid_syncs | length > 0
 
 - name: remove syncoid service
   import_tasks: "systemd-remove.yaml"
   vars:
     systemd_service_name: "{{ syncoid_service_name }}"
-  when: syncoid_syncs | length == 0
+  when: (syncoid_syncs is none) or (syncoid_syncs | length == 0)
