@@ -37,20 +37,20 @@
     masked: no
     enabled: yes
 
-- name: set up syncoid
+- name: configure syncoid service
   block:
-    - name: set up SSH keys
+    - name: generate SSH key
+      ansible.builtin.user:
+        name: root
+        generate_ssh_key: yes
+        ssh_key_type: "{{ syncoid_generated_ssh_key_type }}"
+        ssh_key_bits: "{{ syncoid_generated_ssh_key_bits }}"
+        ssh_key_file: ".ssh/{{ syncoid_generated_ssh_key }}"
+      register: "user_info"
+      when: syncoid_generate_ssh_key
+
+    - name: install SSH key on remote hosts
       block:
-        - name: generate SSH key
-          ansible.builtin.user:
-            name: root
-            generate_ssh_key: yes
-            ssh_key_type: "{{ syncoid_generated_ssh_key_type }}"
-            ssh_key_bits: "{{ syncoid_generated_ssh_key_bits }}"
-            ssh_key_file: ".ssh/{{ syncoid_generated_ssh_key }}"
-          register: "user_info"
-          when: syncoid_generate_ssh_key
-          
         - name: add SSH key to destination authorized_keys
           ansible.posix.authorized_key:
             user: "{{ item.dest_user | default('root') }}"
@@ -70,6 +70,8 @@
           when: item.src_host is defined
           with_items:
             - "{{ syncoid_syncs }}"
+      when: syncoid_ssh_key_install_remote
+
     - name: set up syncoid systemd service
       block:
         - name: set up syncoid systemd service

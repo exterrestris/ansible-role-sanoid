@@ -55,3 +55,6 @@ syncoid_generated_ssh_key_bits: 2048
 
 # Path to SSH key
 syncoid_ssh_key: "/root/.ssh/{{ syncoid_generated_ssh_key if syncoid_generate_ssh_key else 'id_rsa' }}"
+
+# Install SSH key on remote hosts
+syncoid_ssh_key_install_remote: yes
