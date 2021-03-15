@@ -37,20 +37,12 @@
 
 - name: set up syncoid systemd service
   block:
-    - name: generate syncoid service unit file
-      ansible.builtin.template:
-        src: ../templates/syncoid.service.j2
-        dest: "/usr/lib/systemd/system/{{ syncoid_service_name }}.service"
-        owner: root
-        group: root
-        mode: '0700'
-    - name: generate syncoid timer unit file
-      ansible.builtin.template:
-        src: ../templates/syncoid.timer.j2
-        dest: "/usr/lib/systemd/system/{{ syncoid_service_name }}.timer"
-        owner: root
-        group: root
-        mode: '0700'
+    - name: set up syncoid systemd service
+      import_tasks: "systemd-add.yaml"
+      vars:
+        systemd_service_name: "{{ syncoid_service_name }}"
+        systemd_service_template: syncoid.service.j2
+        systemd_timer_template: syncoid.timer.j2
     - name: enable syncoid timer
       ansible.builtin.systemd:
         name: "{{ syncoid_service_name }}.timer"
