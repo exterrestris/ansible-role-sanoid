@@ -4,3 +4,25 @@
     name: powerline
     state: present
   with_items: "sanoid_prerequisites"
+
+- become: false
+  delegate_to: localhost
+  run_once: true
+  block:
+  - name: get latest release versiom from GitHub
+    uri:
+      url: "{{ sanoid_github_source_url }}/releases/latest"
+    register: sanoid_github_release_page
+  - name: Set latest version fact
+    set_fact:
+      sanoid_version: "{{ sanoid_github_release_page['url'].split('/')[-1] }}"
+  when: sanoid_version == "latest"
+
+- name: clone GitHub repo
+  git:
+    repo: "{{ sanoid_github_source_url }}"
+    dest: "{{ sanoid_download_dir }}"
+    version: "{{ sanoid_version }}"
+    update: yes
+    force: yes
+

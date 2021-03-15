@@ -3,7 +3,13 @@
 sanoid_install_from: package
 
 # Github Repo URL
-sanoid_github_source_url: https://github.com/jimsalterjrs/sanoid.git
+sanoid_github_source_url: https://github.com/jimsalterjrs/sanoid
+
+# Download directory
+sanoid_download_dir: /tmp/sanoid
+
+# Version to install: "latest", specific tag or branch
+sanoid_version: latest
 
 # Datasets to snapshot
 sanoid_datasets: []
