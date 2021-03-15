@@ -1,0 +1,17 @@
+---
+- name: generate systemd service unit file
+  ansible.builtin.template:
+    src: "{{ systemd_service_template }}"
+    dest: "/usr/lib/systemd/system/{{ systemd_service_name }}.service"
+    owner: root
+    group: root
+    mode: '0700'
+- name: generate systemd timer unit file
+  ansible.builtin.template:
+    src: "{{ systemd_timer_template }}"
+    dest: "/usr/lib/systemd/system/{{ systemd_service_name }}.timer"
+    owner: root
+    group: root
+    mode: '0700'
+  when: systemd_timer_template is defined
+

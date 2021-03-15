@@ -38,3 +38,16 @@
     - syncoid
     - findoid
     - sleepymutex
+
+- name: set up sanoid-prune systemd service
+  import_tasks: "systemd-add.yaml"
+  vars:
+    systemd_service_name: sanoid-prune
+    systemd_service_template: sanoid-prune.service.j2
+
+- name: set up sanoid systemd service
+  import_tasks: "systemd-add.yaml"
+  vars:
+    systemd_service_name: sanoid
+    systemd_service_template: sanoid.service.j2
+    systemd_timer_template: sanoid.timer.j2

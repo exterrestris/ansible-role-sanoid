@@ -1,0 +1,9 @@
+[Unit]
+Description=Run Sanoid {{ sanoid_timer_frequency }}
+
+[Timer]
+OnCalendar={{ sanoid_timer_frequency }}
+Persistent=true
+
+[Install]
+WantedBy=timers.target

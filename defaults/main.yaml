@@ -23,6 +23,9 @@ sanoid_conf_dir: /etc/sanoid
 # Configuration file path
 sanoid_conf: "{{ sanoid_conf_dir }}/sanoid.conf"
 
+# systemd timer frequency
+sanoid_timer_frequency: '*:0/15'
+
 # Replication pairs
 syncoid_syncs: []
 
