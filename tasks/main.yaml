@@ -1,6 +1,13 @@
 ---
+- name: include os specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version}}.yaml"
+    - "{{ ansible_distribution }}.yaml"
+    - "{{ ansible_os_family }}.yaml"
+
 - name: include install tasks
-  import_tasks: "install-{{ sanoid_install_source }}.yaml"
+  import_tasks: "install-{{ sanoid_install_from }}.yaml"
 
 - name: create config directory
   file:
@@ -20,12 +27,14 @@
 - name: enable sanoid prune service
   ansible.builtin.systemd:
     name: sanoid-prune.service
+    masked: no
     enabled: yes
 
 - name: enable sanoid timer
   ansible.builtin.systemd:
     name: sanoid.timer
     state: started
+    masked: no
     enabled: yes
 
 - name: set up SSH keys
@@ -64,51 +73,25 @@
 
 - name: set up syncoid systemd service
   block:
-    - name: generate syncoid service unit file
-      ansible.builtin.template:
-        src: ../templates/syncoid.service.j2
-        dest: "/usr/lib/systemd/system/{{ syncoid_service_name }}.service"
-        owner: root
-        group: root
-        mode: '0700'
-    - name: generate syncoid timer unit file
-      ansible.builtin.template:
-        src: ../templates/syncoid.timer.j2
-        dest: "/usr/lib/systemd/system/{{ syncoid_service_name }}.timer"
-        owner: root
-        group: root
-        mode: '0700'
+    - name: set up syncoid systemd service
+      import_tasks: "systemd-add.yaml"
+      vars:
+        systemd_service_name: "{{ syncoid_service_name }}"
+        systemd_service_template: syncoid.service.j2
+        systemd_timer_template: syncoid.timer.j2
     - name: enable syncoid timer
       ansible.builtin.systemd:
         name: "{{ syncoid_service_name }}.timer"
         state: started
         enabled: yes
+        masked: no
         daemon_reload: yes
   when:
     - syncoid_syncs is not none
     - syncoid_syncs | length > 0
 
 - name: remove syncoid service
-  block:
-    - name: check service exists
-      stat:
-        path: "/usr/lib/systemd/system/{{ syncoid_service_name }}.timer"
-      register: service_exists
-    - name: disable syncoid timer
-      ansible.builtin.systemd:
-        name: "{{ syncoid_service_name }}.timer"
-        state: stopped
-        enabled: no
-      when: service_exists.stat.exists
-    - name: remove syncoid service unit file
-      file:
-        dest: "/usr/lib/systemd/system/{{ syncoid_service_name }}.service"
-        state: absent
-    - name: remove syncoid timer unit file
-      file:
-        dest: "/usr/lib/systemd/system/{{ syncoid_service_name }}.timer"
-        state: absent
-    - name: reload systemd
-      ansible.builtin.systemd:
-        daemon_reload: yes
+  import_tasks: "systemd-remove.yaml"
+  vars:
+    systemd_service_name: "{{ syncoid_service_name }}"
   when: (syncoid_syncs is none) or (syncoid_syncs | length == 0)

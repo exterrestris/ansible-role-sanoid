@@ -1,6 +1,18 @@
 ---
-# Install method
-sanoid_install_source: package
+# Install method: package or source
+sanoid_install_from: package
+
+# Github Repo URL
+sanoid_source_github_url: https://github.com/jimsalterjrs/sanoid
+
+# Download directory
+sanoid_source_download_dir: /tmp/sanoid
+
+# Version to install: "latest", specific tag or branch
+sanoid_source_version: latest
+
+# Remove sanoid package when installing from source
+sanoid_source_remove_package: yes
 
 # Datasets to snapshot
 sanoid_datasets: []
@@ -13,6 +25,9 @@ sanoid_conf_dir: /etc/sanoid
 
 # Configuration file path
 sanoid_conf: "{{ sanoid_conf_dir }}/sanoid.conf"
+
+# systemd timer frequency
+sanoid_timer_frequency: '*:0/15'
 
 # Replication pairs
 syncoid_syncs: []

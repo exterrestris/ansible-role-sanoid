@@ -1,0 +1,64 @@
+---
+- name: check if package installed
+  block:
+    - name: get installed packages
+      ansible.builtin.package_facts:
+    - name: remove package
+      ansible.builtin.package:
+        name: sanoid
+        state: absent
+      when: ansible_facts.packages['sanoid'] is defined
+  when: sanoid_source_remove_package
+
+- name: install prerequisites
+  ansible.builtin.package:
+    name: powerline
+    state: present
+  with_items: "sanoid_prerequisites"
+
+- become: false
+  delegate_to: localhost
+  run_once: true
+  block:
+  - name: get latest release versiom from GitHub
+    uri:
+      url: "{{ sanoid_source_github_url }}/releases/latest"
+    register: sanoid_github_release_page
+  - name: Set latest version fact
+    set_fact:
+      sanoid_source_version: "{{ sanoid_github_release_page['url'].split('/')[-1] }}"
+  when: sanoid_source_version == "latest"
+
+- name: clone GitHub repo
+  git:
+    repo: "{{ sanoid_source_github_url }}"
+    dest: "{{ sanoid_source_download_dir }}"
+    version: "{{ sanoid_source_version }}"
+    update: yes
+    force: yes
+
+- name: copy binaries
+  copy:
+    src: "{{ sanoid_source_download_dir }}/{{ item }}"
+    dest: /usr/local/sbin
+    remote_src: yes
+    mode: '0700'
+  become: true
+  with_items:
+    - sanoid
+    - syncoid
+    - findoid
+    - sleepymutex
+
+- name: set up sanoid-prune systemd service
+  import_tasks: "systemd-add.yaml"
+  vars:
+    systemd_service_name: sanoid-prune
+    systemd_service_template: sanoid-prune.service.j2
+
+- name: set up sanoid systemd service
+  import_tasks: "systemd-add.yaml"
+  vars:
+    systemd_service_name: sanoid
+    systemd_service_template: sanoid.service.j2
+    systemd_timer_template: sanoid.timer.j2
