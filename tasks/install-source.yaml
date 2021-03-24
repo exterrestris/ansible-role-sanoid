@@ -12,7 +12,7 @@
 
 - name: install prerequisites
   ansible.builtin.package:
-    name: powerline
+    name: "{{ item }}"
     state: present
   with_items: "sanoid_prerequisites"
 
