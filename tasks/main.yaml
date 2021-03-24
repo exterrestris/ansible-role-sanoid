@@ -7,7 +7,7 @@
     - "{{ ansible_os_family }}.yaml"
 
 - name: include install tasks
-  import_tasks: "install-{{ sanoid_install_from }}.yaml"
+  include_tasks: "install-{{ sanoid_install_from }}.yaml"
 
 - name: create config directory
   file:
