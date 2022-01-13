@@ -41,6 +41,9 @@ syncoid_service_name: syncoid
 # systemd timer frequency
 syncoid_timer_frequency: daily
 
+# systemd timer enabled
+syncoid_timer_enabled: yes
+
 # Use an SSH key to connect to remote hosts
 syncoid_use_ssh_key: yes
 

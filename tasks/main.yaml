@@ -84,7 +84,7 @@
           ansible.builtin.systemd:
             name: "{{ syncoid_service_name }}.timer"
             state: started
-            enabled: yes
+            enabled: "{{ syncoid_timer_enabled }}"
             masked: no
             daemon_reload: yes
   when:
