@@ -39,6 +39,7 @@ In order for Syncoid to replicate to a remote host, you must ensure that SSH acc
 | *`setting`* | `""` | Policy setting |
 
 All settings supported by Sanoid in templates are supported - see [sanoid.conf](https://github.com/jimsalterjrs/sanoid/blob/master/sanoid.conf) and [sanoid.defaults.conf](https://github.com/jimsalterjrs/sanoid/blob/master/sanoid.defaults.conf) for details
+Similarly, most [Syncoid flags](https://github.com/jimsalterjrs/sanoid/wiki/Syncoid#options) are configurable via `syncoid_syncs`.
 
 #### `sanoid_datasets[]`
 | Variable | Default | Comments |
@@ -66,11 +67,11 @@ All settings supported by Sanoid in templates are supported - see [sanoid.conf](
 | :--- | :--- | :--- |
 | `syncoid_service_name` | `"syncoid"` | systemd service name for Syncoid |
 | `syncoid_timer_frequency` | `"daily"` | systemd service frequency for Syncoid |
-| `syncoid_use_ssh_key` | `yes` | Use an SSH key to login to remote hosts | 
-| `syncoid_generate_ssh_key` | `yes` | Generate an SSH key for Syncoid to use | 
-| `syncoid_generated_ssh_key` | `id_syncoid` | Name of generated SSH key | 
+| `syncoid_use_ssh_key` | `yes` | Use an SSH key to login to remote hosts |
+| `syncoid_generate_ssh_key` | `yes` | Generate an SSH key for Syncoid to use |
+| `syncoid_generated_ssh_key` | `id_syncoid` | Name of generated SSH key |
 | `syncoid_ssh_key` | `/root/.ssh/{`*`syncoid_generated_ssh_key`*`\|id_rsa}` | Path to SSH key for Syncoid to use |
-| `syncoid_ssh_key_install_remote` | `yes` | Install specified SSH key on remote hosts. Requires remote hosts to be defined in inventory | 
+| `syncoid_ssh_key_install_remote` | `yes` | Install specified SSH key on remote hosts. Requires remote hosts to be defined in inventory |
 
 ## Example
 
