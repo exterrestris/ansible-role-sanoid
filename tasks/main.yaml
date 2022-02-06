@@ -22,7 +22,7 @@
     dest: "{{ sanoid_conf }}"
     owner: root
     group: root
-    mode: '0700'
+    mode: '0600'
 
 - name: enable sanoid prune service
   ansible.builtin.systemd:

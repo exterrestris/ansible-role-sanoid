@@ -50,6 +50,21 @@
     - findoid
     - sleepymutex
 
+- name: create config directory
+  file:
+    dest: "{{ sanoid_conf_dir }}"
+    state: directory
+    owner: root
+    group: root
+
+- name: copy sanoid.defaults.conf to config dir
+  copy:
+    src: "{{ sanoid_source_download_dir }}/sanoid.defaults.conf"
+    dest: "{{ sanoid_conf_dir }}"
+    remote_src: yes
+    mode: '0644'
+  become: true
+
 - name: set paths to binaries
   set_fact:
     sanoid_bin_path: "{{ sanoid_source_install_dir }}/sanoid"
