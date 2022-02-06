@@ -14,7 +14,7 @@
   ansible.builtin.package:
     name: "{{ item }}"
     state: present
-  with_items: "sanoid_prerequisites"
+  with_items: "{{ sanoid_prerequisites }}"
 
 - become: false
   delegate_to: localhost
