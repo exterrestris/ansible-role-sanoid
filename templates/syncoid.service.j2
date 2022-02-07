@@ -7,12 +7,73 @@ After=zfs.target
 Type=oneshot
 {% for sync in syncoid_syncs %}
 ExecStart={{ syncoid_path | default(syncoid_bin_path) }} \
+{% if sync.identifier | default('') %}
+  --identifier={{ sync.identifier }} \
+{% endif %}
 {% if sync.force_delete | default(False) %}
   --force-delete \
 {% endif %}
 {% if sync.recursive | default(False) %}
   --recursive \
+{% if sync.skip_parent | default(False) %}
+  --skip-parent \ {# only relevant if --recursive #}
 {% endif %}
+{% endif %}
+{% if sync.compress | default('') %}
+  --compress={{ sync.compress }} \
+{% endif %}
+{% if sync.source_bwlimit | default('') %}
+  --source-bwlimit={{ sync.source_bwlimit }} \
+{% endif %}
+{% if sync.target_bwlimit | default('') %}
+  --target-bwlimit={{ sync.target_bwlimit }} \
+{% endif %}
+{% if sync.mbuffer_size | default('') %}
+  --mbuffer-size={{ sync.mbuffer_size }} \
+{% endif %}
+{% if sync.pv_options | default('') %}
+  --pv-options={{ sync.pv_options }} \
+{% endif %}
+{% if sync.no_stream | default(False) %}
+  --no-stream \
+{% endif %}
+{% if sync.no_sync_snap | default(False) %}
+  --no-sync-snap \
+{% if sync.create_bookmark | default(False) %}
+  --create-bookmark \
+{% endif %}
+{% endif %}
+{% if sync.keep_sync_snap | default(False) %}
+  --keep-sync-snap \
+{% endif %}
+{% if sync.preserve_recordsize | default(False) %}
+  --preserve-recordsize
+{% endif %}
+{% if sync.no_clone_rollback | default(False) %}
+  --no-clone-rollback \
+{% endif %}
+{% if sync.no_rollback | default(False) %}
+  --no-rollback \
+{% endif %}
+{% for sync_exclude in sync.exclude | default([]) %}
+  --exclude={{ sync_exclude }}
+{% endfor %}
+{% if sync.sendoptions | default('') %}
+  --sendoptions={{ sync.sendoptions }} \
+{% endif %}
+{% if sync.recvoptions | default('') %}
+  --recvoptions={{ sync.recvoptions }} \
+{% endif %}
+{% if sync.no_privilege_escalation | default(False) %}
+  --no-privilege-escalation \
+{% endif %}
+{% if sync.no_resume | default(False) %}
+  --no-resume \
+{% endif %}
+{% if sync.no_clone_handling | default(False) %}
+  --no-clone-handling \
+{% endif %}
+
 {% if syncoid_use_ssh_key | default(False) %}
   --sshkey {{ syncoid_ssh_key }} \
 {% endif %}
