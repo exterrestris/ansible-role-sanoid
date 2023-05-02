@@ -73,7 +73,6 @@ ExecStart={{ syncoid_path | default(syncoid_bin_path) }} \
 {% if sync.no_clone_handling | default(False) %}
   --no-clone-handling \
 {% endif %}
-
 {% if syncoid_use_ssh_key | default(False) %}
   --sshkey {{ syncoid_ssh_key }} \
 {% endif %}
