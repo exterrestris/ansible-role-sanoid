@@ -62,6 +62,12 @@ Similarly, most [Syncoid flags](https://github.com/jimsalterjrs/sanoid/wiki/Sync
 | `recursive` | `"no"` | Copy child datasets |
 | `force_delete` | `"no"` | Remove destination datasets recursively |
 
+### Sanoid systemd Settings
+| Variable | Default | Comments |
+| :--- | :--- | :--- |
+| `sanoid_systemd_ExecStartPre` | undefined | Add ExecStartPre commands to the systemd service file |
+| `sanoid_systemd_ExecStartPost` | undefined | Add ExecStartPost commands to the systemd service file |
+
 ### Syncoid systemd Settings
 | Variable | Default | Comments |
 | :--- | :--- | :--- |
@@ -72,6 +78,9 @@ Similarly, most [Syncoid flags](https://github.com/jimsalterjrs/sanoid/wiki/Sync
 | `syncoid_generated_ssh_key` | `id_syncoid` | Name of generated SSH key |
 | `syncoid_ssh_key` | `/root/.ssh/{`*`syncoid_generated_ssh_key`*`\|id_rsa}` | Path to SSH key for Syncoid to use |
 | `syncoid_ssh_key_install_remote` | `yes` | Install specified SSH key on remote hosts. Requires remote hosts to be defined in inventory |
+| `syncoid_systemd_ExecStartPre` | undefined | Add ExecStartPre commands to the systemd service file |
+| `syncoid_systemd_ExecStartPost` | undefined | Add ExecStartPost commands to the systemd service file |
+
 
 ## Example
 
@@ -122,4 +131,9 @@ syncoid_syncs:
     recursive: yes
   - src: zpoolname/dataset
     dest: zpoolname/dataset-backup
+    
+syncoid_systemd_ExecStartPre:
+  - /usr/bin/curl https://hc-ping.com/{ ping id }/syncoid/start
+syncoid_systemd_ExecStartPost:
+  - /usr/bin/curl https://hc-ping.com/{ ping id }/syncoid
 ```

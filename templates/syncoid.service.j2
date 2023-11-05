@@ -87,3 +87,13 @@ ExecStart={{ syncoid_path | default(syncoid_bin_path) }} \
   {{ sync.dest }}
 {% endif %}
 {% endfor %}
+{% if syncoid_systemd_ExecStartPre is defined and syncoid_systemd_ExecStartPre %}
+{% for exec in syncoid_systemd_ExecStartPre %}
+ExecStartPre={{ exec }}
+{% endfor %}
+{% endif %}
+{% if syncoid_systemd_ExecStartPost is defined and syncoid_systemd_ExecStartPost %}
+{% for exec in syncoid_systemd_ExecStartPost %}
+ExecStartPost={{ exec }}
+{% endfor %}
+{% endif %}
