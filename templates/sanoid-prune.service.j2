@@ -8,6 +8,16 @@ ConditionFileNotEmpty={{ sanoid_conf }}
 Environment=TZ=UTC
 Type=oneshot
 ExecStart={{ sanoid_path | default(sanoid_bin_path) }} --prune-snapshots --verbose
+{% if sanoid_prune_service_pre_start is defined and sanoid_prune_service_pre_start %}
+{%  for exec in sanoid_prune_service_pre_start %}
+ExecStartPre={{ exec }}
+{%  endfor %}
+{% endif %}
+{% if sanoid_prune_service_post_start is defined and sanoid_prune_service_post_start %}
+{%  for exec in sanoid_prune_service_post_start %}
+ExecStartPost={{ exec }}
+{%  endfor %}
+{% endif %}
 
 [Install]
 WantedBy=sanoid.service

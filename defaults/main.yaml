@@ -42,6 +42,13 @@ sanoid_service_post_start: []
 # Timer frequency
 sanoid_timer_frequency: '*:0/15'
 
+## Systemd prune service
+# ExecPreStart
+sanoid_prune_service_pre_start: []
+
+# ExecPOstStart
+sanoid_prune_service_pre_start: []
+
 ### Syncoid
 ## Configuration
 # Replication pairs

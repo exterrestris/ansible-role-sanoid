@@ -65,15 +65,17 @@ Similarly, most [Syncoid flags](https://github.com/jimsalterjrs/sanoid/wiki/Sync
 ### Sanoid systemd Settings
 | Variable | Default | Comments |
 | :--- | :--- | :--- |
-| `sanoid_service_pre_start` | `[]` | Add ExecStartPre commands to the systemd service file |
-| `sanoid_service_post_start` | `[]` | Add ExecStartPost commands to the systemd service file |
+| `sanoid_service_pre_start` | `[]` | Add ExecStartPre commands to the Sanoid systemd service file |
+| `sanoid_service_post_start` | `[]` | Add ExecStartPost commands to the Sanoid systemd service file |
+| `sanoid_prune_service_pre_start` | `[]` | Add ExecStartPre commands to the Sanoid Prune systemd service file |
+| `sanoid_prune_service_post_start` | `[]` | Add ExecStartPost commands to the Sanoid Prune systemd service file |
 
 ### Syncoid systemd Settings
 | Variable | Default | Comments |
 | :--- | :--- | :--- |
 | `syncoid_service_name` | `"syncoid"` | systemd service name for Syncoid |
-| `syncoid_service_pre_start` | `[]` | Add ExecStartPre commands to the systemd service file |
-| `syncoid_service_post_start` | `[]` | Add ExecStartPost commands to the systemd service file |
+| `syncoid_service_pre_start` | `[]` | Add ExecStartPre commands to the Syncoid systemd service file |
+| `syncoid_service_post_start` | `[]` | Add ExecStartPost commands to the Syncoid systemd service file |
 | `syncoid_timer_frequency` | `"daily"` | systemd service frequency for Syncoid |
 | `syncoid_use_ssh_key` | `yes` | Use an SSH key to login to remote hosts |
 | `syncoid_generate_ssh_key` | `yes` | Generate an SSH key for Syncoid to use |
