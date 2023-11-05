@@ -65,21 +65,21 @@ Similarly, most [Syncoid flags](https://github.com/jimsalterjrs/sanoid/wiki/Sync
 ### Sanoid systemd Settings
 | Variable | Default | Comments |
 | :--- | :--- | :--- |
-| `sanoid_systemd_ExecStartPre` | undefined | Add ExecStartPre commands to the systemd service file |
-| `sanoid_systemd_ExecStartPost` | undefined | Add ExecStartPost commands to the systemd service file |
+| `sanoid_service_pre_start` | `[]` | Add ExecStartPre commands to the systemd service file |
+| `sanoid_service_post_start` | `[]` | Add ExecStartPost commands to the systemd service file |
 
 ### Syncoid systemd Settings
 | Variable | Default | Comments |
 | :--- | :--- | :--- |
 | `syncoid_service_name` | `"syncoid"` | systemd service name for Syncoid |
+| `syncoid_service_pre_start` | `[]` | Add ExecStartPre commands to the systemd service file |
+| `syncoid_service_post_start` | `[]` | Add ExecStartPost commands to the systemd service file |
 | `syncoid_timer_frequency` | `"daily"` | systemd service frequency for Syncoid |
 | `syncoid_use_ssh_key` | `yes` | Use an SSH key to login to remote hosts |
 | `syncoid_generate_ssh_key` | `yes` | Generate an SSH key for Syncoid to use |
 | `syncoid_generated_ssh_key` | `id_syncoid` | Name of generated SSH key |
 | `syncoid_ssh_key` | `/root/.ssh/{`*`syncoid_generated_ssh_key`*`\|id_rsa}` | Path to SSH key for Syncoid to use |
 | `syncoid_ssh_key_install_remote` | `yes` | Install specified SSH key on remote hosts. Requires remote hosts to be defined in inventory |
-| `syncoid_systemd_ExecStartPre` | undefined | Add ExecStartPre commands to the systemd service file |
-| `syncoid_systemd_ExecStartPost` | undefined | Add ExecStartPost commands to the systemd service file |
 
 
 ## Example
@@ -132,8 +132,8 @@ syncoid_syncs:
   - src: zpoolname/dataset
     dest: zpoolname/dataset-backup
     
-syncoid_systemd_ExecStartPre:
+syncoid_service_pre_start:
   - /usr/bin/curl https://hc-ping.com/{ ping id }/syncoid/start
-syncoid_systemd_ExecStartPost:
+syncoid_service_post_start:
   - /usr/bin/curl https://hc-ping.com/{ ping id }/syncoid
 ```

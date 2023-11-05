@@ -1,4 +1,5 @@
 ---
+### Installation
 # Install method: package or source
 sanoid_install_from: package
 
@@ -17,6 +18,8 @@ sanoid_source_version: latest
 # Remove sanoid package when installing from source
 sanoid_source_remove_package: yes
 
+### Sanoid
+## Configuration
 # Datasets to snapshot
 sanoid_datasets: []
 
@@ -29,19 +32,36 @@ sanoid_conf_dir: /etc/sanoid
 # Configuration file path
 sanoid_conf: "{{ sanoid_conf_dir }}/sanoid.conf"
 
-# systemd timer frequency
+## Systemd service
+# ExecPreStart
+sanoid_service_pre_start: []
+
+# ExecPostStart
+sanoid_service_post_start: []
+
+# Timer frequency
 sanoid_timer_frequency: '*:0/15'
 
+### Syncoid
+## Configuration
 # Replication pairs
 syncoid_syncs: []
 
-# systemd service name
+## Systemd service
+# Service name
 syncoid_service_name: syncoid
 
-# systemd timer frequency
+# ExecPreStart
+syncoid_service_pre_start: []
+
+# ExecPostStart
+syncoid_service_post_start: []
+
+# Timer frequency
 syncoid_timer_frequency: daily
 
-# systemd timer enabled
+## SSH configuration
+# Timer enabled
 syncoid_timer_enabled: yes
 
 # Use an SSH key to connect to remote hosts
