@@ -6,7 +6,7 @@ sanoid_install_from: package
 sanoid_source_github_url: https://github.com/jimsalterjrs/sanoid
 
 # Download directory
-sanoid_source_download_dir: /tmp/sanoid
+sanoid_source_download_dir: /usr/local/src/sanoid
 
 # Install directory
 sanoid_source_install_dir: /usr/local/sbin
