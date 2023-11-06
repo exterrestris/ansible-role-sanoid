@@ -39,6 +39,9 @@ sanoid_service_pre_start: []
 # ExecPostStart
 sanoid_service_post_start: []
 
+# Timer enabled
+sanoid_timer_enabled: yes
+
 # Timer frequency
 sanoid_timer_frequency: '*:0/15'
 
@@ -48,6 +51,9 @@ sanoid_prune_service_pre_start: []
 
 # ExecPostStart
 sanoid_prune_service_post_start: []
+
+# Service enabled
+sanoid_prune_service_enabled: yes
 
 ### Syncoid
 ## Configuration
