@@ -18,11 +18,10 @@
         dest: "/usr/lib/systemd/system/{{ systemd_service_name }}.timer"
         state: absent
       when: timer_exists.stat.exists
+      notify: reload systemd
     - name: remove systemd service unit file
       file:
         dest: "/usr/lib/systemd/system/{{ systemd_service_name }}.service"
         state: absent
-    - name: reload systemd
-      ansible.builtin.systemd:
-        daemon_reload: yes
+      notify: reload systemd
   when: service_exists.stat.exists

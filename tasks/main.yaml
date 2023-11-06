@@ -86,7 +86,7 @@
             state: started
             enabled: "{{ syncoid_timer_enabled }}"
             masked: no
-            daemon_reload: yes
+          notify: reload systemd
   when:
     - syncoid_syncs is not none
     - syncoid_syncs | length > 0

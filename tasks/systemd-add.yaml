@@ -6,6 +6,7 @@
     owner: root
     group: root
     mode: '0700'
+  notify: reload systemd
 - name: generate systemd timer unit file
   ansible.builtin.template:
     src: "{{ systemd_timer_template }}"
@@ -14,4 +15,5 @@
     group: root
     mode: '0700'
   when: systemd_timer_template is defined
+  notify: reload systemd
 
