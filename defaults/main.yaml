@@ -73,3 +73,9 @@ syncoid_ssh_key_install_remote: yes
 
 # Update known hosts
 syncoid_update_known_hosts: yes
+
+# Default syncoid ZFS send options
+syncoid_send_options: ''
+
+# Default syncoid ZFS recv options
+syncoid_recv_options: ''

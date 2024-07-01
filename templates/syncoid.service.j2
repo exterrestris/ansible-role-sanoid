@@ -58,11 +58,11 @@ ExecStart={{ syncoid_path | default(syncoid_bin_path) }} \
 {% for sync_exclude in sync.exclude | default([]) %}
   --exclude={{ sync_exclude }}
 {% endfor %}
-{% if sync.sendoptions | default('') %}
-  --sendoptions={{ sync.sendoptions }} \
+{% if sync.send_options | default(syncoid_send_options) | default(False) %}
+  --sendoptions={{ sync.send_options | default(syncoid_send_options) }} \
 {% endif %}
-{% if sync.recvoptions | default('') %}
-  --recvoptions={{ sync.recvoptions }} \
+{% if sync.recv_options | default(syncoid_recv_options) | default(False) %}
+  --recvoptions={{ sync.recv_options | default(syncoid_recv_options) }} \
 {% endif %}
 {% if sync.no_privilege_escalation | default(False) %}
   --no-privilege-escalation \
