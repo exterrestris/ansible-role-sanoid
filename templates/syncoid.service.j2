@@ -46,8 +46,8 @@ ExecStart={{ syncoid_path | default(syncoid_bin_path) }} \
 {% if sync.keep_sync_snap | default(False) %}
   --keep-sync-snap \
 {% endif %}
-{% if sync.preserve_recordsize | default(False) %}
-  --preserve-recordsize
+{% if sync.preserve_recordsize | default(True) %}
+  --preserve-recordsize \
 {% endif %}
 {% if sync.no_clone_rollback | default(False) %}
   --no-clone-rollback \
