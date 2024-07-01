@@ -1,9 +1,9 @@
 {% for dataset in sanoid_datasets %}
 [{{ dataset.name }}]
     use_template = {{ [dataset.templates] | mandatory | flatten | join(',') }}
-    recursive = {{ dataset.recursive | default('no') }}
-    process_children_only = {{ dataset.process_children_only | default('no') }}
-    skip_children = {{ dataset.skip_children | default('no') }}
+    recursive = {{ 'yes' if (dataset.recursive | default(False)) else 'no' }}
+    process_children_only = {{ 'yes' if (dataset.process_children_only | default(False)) else 'no' }}
+    skip_children = {{ 'yes' if (dataset.skip_children | default(False)) else 'no' }}
 {% if dataset.overrides | default([]) | length > 0 %}
 {% for setting, value in dataset.overrides.items() %}
     {{ setting }} = {{ value }}
