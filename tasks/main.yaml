@@ -72,6 +72,29 @@
             - "{{ syncoid_syncs }}"
       when: syncoid_ssh_key_install_remote
 
+    - name: update known_hosts
+      block:
+        - name: add destination to known_hosts
+          ansible.builtin.known_hosts:
+            name: "{{ item.dest_host }}"
+            key: "{{ lookup('pipe', 'ssh-keyscan -t' + syncoid_ssh_key_type + ' ' + item.dest_host ) }}"
+            path: "{{ syncoid_known_hosts }}"
+            state: present
+          when: item.dest_host is defined
+          with_items:
+            - "{{ syncoid_syncs }}"
+
+        - name: add source to known_hosts
+          ansible.builtin.known_hosts:
+            name: "{{ item.src_host }}"
+            key: "{{ lookup('pipe', 'ssh-keyscan -t' + syncoid_ssh_key_type + ' ' + item.src_host ) }}"
+            path: "{{ syncoid_known_hosts }}"
+            state: present
+          when: item.src_host is defined
+          with_items:
+            - "{{ syncoid_syncs }}"
+      when: syncoid_update_known_hosts
+
     - name: set up syncoid systemd service
       block:
         - name: set up syncoid systemd service

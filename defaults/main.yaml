@@ -59,8 +59,17 @@ syncoid_generated_ssh_key_type: 'rsa'
 # Number of bits of generated SSH key
 syncoid_generated_ssh_key_bits: 2048
 
+# Type of SSH key
+syncoid_ssh_key_type: "{{ syncoid_generated_ssh_key_type if syncoid_generate_ssh_key else 'rsa' }}"
+
 # Path to SSH key
 syncoid_ssh_key: "/root/.ssh/{{ syncoid_generated_ssh_key if syncoid_generate_ssh_key else 'id_rsa' }}"
 
+# Path to known hosts
+syncoid_known_hosts: "/root/.ssh/known_hosts"
+
 # Install SSH key on remote hosts
 syncoid_ssh_key_install_remote: yes
+
+# Update known hosts
+syncoid_update_known_hosts: yes

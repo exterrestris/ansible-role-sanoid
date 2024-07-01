@@ -72,6 +72,7 @@ Similarly, most [Syncoid flags](https://github.com/jimsalterjrs/sanoid/wiki/Sync
 | `syncoid_generated_ssh_key` | `id_syncoid` | Name of generated SSH key |
 | `syncoid_ssh_key` | `/root/.ssh/{`*`syncoid_generated_ssh_key`*`\|id_rsa}` | Path to SSH key for Syncoid to use |
 | `syncoid_ssh_key_install_remote` | `yes` | Install specified SSH key on remote hosts. Requires remote hosts to be defined in inventory |
+| `syncoid_update_known_hosts` | `yes` | Update known_hosts with src/destination host public keys. |
 
 ## Example
 
