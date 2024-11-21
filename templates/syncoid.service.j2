@@ -47,7 +47,7 @@ ExecStart={{ syncoid_path | default(syncoid_bin_path) }} \
   --keep-sync-snap \
 {% endif %}
 {% if sync.preserve_recordsize | default(False) %}
-  --preserve-recordsize
+  --preserve-recordsize \
 {% endif %}
 {% if sync.no_clone_rollback | default(False) %}
   --no-clone-rollback \
@@ -56,7 +56,7 @@ ExecStart={{ syncoid_path | default(syncoid_bin_path) }} \
   --no-rollback \
 {% endif %}
 {% for sync_exclude in sync.exclude | default([]) %}
-  --exclude={{ sync_exclude }}
+  --exclude={{ sync_exclude }} \
 {% endfor %}
 {% if sync.sendoptions | default('') %}
   --sendoptions={{ sync.sendoptions }} \
@@ -73,7 +73,6 @@ ExecStart={{ syncoid_path | default(syncoid_bin_path) }} \
 {% if sync.no_clone_handling | default(False) %}
   --no-clone-handling \
 {% endif %}
-
 {% if syncoid_use_ssh_key | default(False) %}
   --sshkey {{ syncoid_ssh_key }} \
 {% endif %}
