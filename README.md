@@ -39,7 +39,7 @@ In order for Syncoid to replicate to a remote host, you must ensure that SSH acc
 | *`setting`* | `""` | Policy setting |
 
 All settings supported by Sanoid in templates are supported - see [sanoid.conf](https://github.com/jimsalterjrs/sanoid/blob/master/sanoid.conf) and [sanoid.defaults.conf](https://github.com/jimsalterjrs/sanoid/blob/master/sanoid.defaults.conf) for details
-Similarly, most [Syncoid flags](https://github.com/jimsalterjrs/sanoid/wiki/Syncoid#options) are configurable via `syncoid_syncs`.
+Similarly, most [Syncoid flags](https://github.com/jimsalterjrs/sanoid?tab=readme-ov-file#syncoid-command-line-options) are configurable via `syncoid_syncs`.
 
 #### `sanoid_datasets[]`
 | Variable | Default | Comments |
