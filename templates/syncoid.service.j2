@@ -43,20 +43,32 @@ ExecStart={{ syncoid_path | default(syncoid_bin_path) }} \
   --create-bookmark \
 {% endif %}
 {% endif %}
+{% if sync.use_hold | default(False) %}
+  --use-hold \
+{% endif %}
 {% if sync.keep_sync_snap | default(False) %}
   --keep-sync-snap \
 {% endif %}
 {% if sync.preserve_recordsize | default(False) %}
-  --preserve-recordsize
+  --preserve-recordsize \
 {% endif %}
-{% if sync.no_clone_rollback | default(False) %}
-  --no-clone-rollback \
+{% if sync.preserve_properties | default(False) %}
+  --preserve-properties \
 {% endif %}
 {% if sync.no_rollback | default(False) %}
   --no-rollback \
 {% endif %}
 {% for sync_exclude in sync.exclude | default([]) %}
-  --exclude={{ sync_exclude }}
+  --exclude={{ sync_exclude }} \
+{% endfor %}
+{% for sync_exclude_dataset in sync.exclude_datasets | default([]) %}
+  --exclude-datasets={{ sync_exclude_dataset }} \
+{% endfor %}
+{% for sync_exclude_snap in sync.exclude_snaps | default([]) %}
+  --exclude-snaps={{ sync_exclude_snap }} \
+{% endfor %}
+{% for sync_include_snap in sync.include_snaps | default([]) %}
+  --include-snaps={{ sync_include_snap }} \
 {% endfor %}
 {% if sync.sendoptions | default('') %}
   --sendoptions={{ sync.sendoptions }} \
@@ -73,7 +85,6 @@ ExecStart={{ syncoid_path | default(syncoid_bin_path) }} \
 {% if sync.no_clone_handling | default(False) %}
   --no-clone-handling \
 {% endif %}
-
 {% if syncoid_use_ssh_key | default(False) %}
   --sshkey {{ syncoid_ssh_key }} \
 {% endif %}
