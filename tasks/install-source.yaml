@@ -21,16 +21,16 @@
   run_once: true
   block:
   - name: get latest release versiom from GitHub
-    uri:
+    ansible.builtin.uri:
       url: "{{ sanoid_source_github_url }}/releases/latest"
     register: sanoid_github_release_page
   - name: Set latest version fact
-    set_fact:
+    ansible.builtin.set_fact:
       sanoid_source_version: "{{ sanoid_github_release_page['url'].split('/')[-1] }}"
   when: sanoid_source_version == "latest"
 
 - name: clone GitHub repo
-  git:
+  ansible.builtin.git:
     repo: "{{ sanoid_source_github_url }}"
     dest: "{{ sanoid_source_download_dir }}"
     version: "{{ sanoid_source_version }}"
@@ -38,7 +38,7 @@
     force: yes
 
 - name: copy binaries
-  copy:
+  ansible.builtin.copy:
     src: "{{ sanoid_source_download_dir }}/{{ item }}"
     dest: "{{ sanoid_source_install_dir }}"
     remote_src: yes
@@ -51,14 +51,14 @@
     - sleepymutex
 
 - name: create config directory
-  file:
+  ansible.builtin.file:
     dest: "{{ sanoid_conf_dir }}"
     state: directory
     owner: root
     group: root
 
 - name: copy sanoid.defaults.conf to config dir
-  copy:
+  ansible.builtin.copy:
     src: "{{ sanoid_source_download_dir }}/sanoid.defaults.conf"
     dest: "{{ sanoid_conf_dir }}"
     remote_src: yes
@@ -66,18 +66,18 @@
   become: true
 
 - name: set paths to binaries
-  set_fact:
+  ansible.builtin.set_fact:
     sanoid_bin_path: "{{ sanoid_source_install_dir }}/sanoid"
     syncoid_bin_path: "{{ sanoid_source_install_dir }}/syncoid"
 
 - name: set up sanoid-prune systemd service
-  import_tasks: "systemd-add.yaml"
+  ansible.builtin.include_tasks: "systemd-add.yaml"
   vars:
     systemd_service_name: sanoid-prune
     systemd_service_template: sanoid-prune.service.j2
 
 - name: set up sanoid systemd service
-  import_tasks: "systemd-add.yaml"
+  ansible.builtin.include_tasks: "systemd-add.yaml"
   vars:
     systemd_service_name: sanoid
     systemd_service_template: sanoid.service.j2

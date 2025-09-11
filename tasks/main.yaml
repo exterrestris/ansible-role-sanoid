@@ -1,16 +1,16 @@
 ---
 - name: include os specific variables
-  include_vars: "{{ item }}"
+  ansible.builtin.include_vars: "{{ item }}"
   with_first_found:
     - "{{ ansible_distribution }}-{{ ansible_distribution_major_version}}.yaml"
     - "{{ ansible_distribution }}.yaml"
     - "{{ ansible_os_family }}.yaml"
 
 - name: include install tasks
-  include_tasks: "install-{{ sanoid_install_from }}.yaml"
+  ansible.builtin.include_tasks: "install-{{ sanoid_install_from }}.yaml"
 
 - name: create config directory
-  file:
+  ansible.builtin.file:
     dest: "{{ sanoid_conf_dir }}"
     state: directory
     owner: root

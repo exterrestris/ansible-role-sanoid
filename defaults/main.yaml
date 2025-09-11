@@ -60,6 +60,12 @@ sanoid_prune_service_enabled: yes
 # Replication pairs
 syncoid_syncs: []
 
+# Default ZFS send options
+syncoid_send_options: ''
+
+# Default ZFS recv options
+syncoid_recv_options: ''
+
 ## Systemd service
 # Service name
 syncoid_service_name: syncoid
@@ -73,10 +79,10 @@ syncoid_service_post_start: []
 # Timer frequency
 syncoid_timer_frequency: daily
 
-## SSH configuration
 # Timer enabled
 syncoid_timer_enabled: yes
 
+## SSH configuration
 # Use an SSH key to connect to remote hosts
 syncoid_use_ssh_key: yes
 
@@ -107,8 +113,3 @@ syncoid_ssh_key_install_remote: yes
 # Update known hosts
 syncoid_update_known_hosts: yes
 
-# Default syncoid ZFS send options
-syncoid_send_options: ''
-
-# Default syncoid ZFS recv options
-syncoid_recv_options: ''

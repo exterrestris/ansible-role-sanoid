@@ -7,85 +7,85 @@ After=zfs.target
 Type=oneshot
 {% for sync in syncoid_syncs %}
 ExecStart={{ syncoid_path | default(syncoid_bin_path) }} \
-{% if sync.identifier | default('') %}
+{%  if sync.identifier | default('') %}
   --identifier={{ sync.identifier }} \
-{% endif %}
-{% if sync.force_delete | default(False) %}
+{%  endif %}
+{%  if sync.force_delete | default(False) %}
   --force-delete \
-{% endif %}
-{% if sync.recursive | default(False) %}
+{%  endif %}
+{%  if sync.recursive | default(False) %}
   --recursive \
-{% if sync.skip_parent | default(False) %}
+{%   if sync.skip_parent | default(False) %}
   --skip-parent \ {# only relevant if --recursive #}
-{% endif %}
-{% endif %}
-{% if sync.compress | default('') %}
+{%   endif %}
+{%  endif %}
+{%  if sync.compress | default('') %}
   --compress={{ sync.compress }} \
-{% endif %}
-{% if sync.source_bwlimit | default('') %}
+{%  endif %}
+{%  if sync.source_bwlimit | default('') %}
   --source-bwlimit={{ sync.source_bwlimit }} \
-{% endif %}
-{% if sync.target_bwlimit | default('') %}
+{%  endif %}
+{%  if sync.target_bwlimit | default('') %}
   --target-bwlimit={{ sync.target_bwlimit }} \
-{% endif %}
-{% if sync.mbuffer_size | default('') %}
+{%  endif %}
+{%  if sync.mbuffer_size | default('') %}
   --mbuffer-size={{ sync.mbuffer_size }} \
-{% endif %}
-{% if sync.pv_options | default('') %}
+{%  endif %}
+{%  if sync.pv_options | default('') %}
   --pv-options={{ sync.pv_options }} \
-{% endif %}
-{% if sync.no_stream | default(False) %}
+{%  endif %}
+{%  if sync.no_stream | default(False) %}
   --no-stream \
-{% endif %}
-{% if sync.no_sync_snap | default(False) %}
+{%  endif %}
+{%  if sync.no_sync_snap | default(False) %}
   --no-sync-snap \
-{% if sync.create_bookmark | default(False) %}
+{%   if sync.create_bookmark | default(False) %}
   --create-bookmark \
-{% endif %}
-{% endif %}
-{% if sync.keep_sync_snap | default(False) %}
+{%   endif %}
+{%  endif %}
+{%  if sync.keep_sync_snap | default(False) %}
   --keep-sync-snap \
-{% endif %}
-{% if sync.preserve_recordsize | default(True) %}
+{%  endif %}
+{%  if sync.preserve_recordsize | default(True) %}
   --preserve-recordsize \
-{% endif %}
-{% if sync.no_clone_rollback | default(False) %}
+{%  endif %}
+{%  if sync.no_clone_rollback | default(False) %}
   --no-clone-rollback \
-{% endif %}
-{% if sync.no_rollback | default(False) %}
+{%  endif %}
+{%  if sync.no_rollback | default(False) %}
   --no-rollback \
-{% endif %}
-{% for sync_exclude in sync.exclude | default([]) %}
+{%  endif %}
+{%  for sync_exclude in sync.exclude | default([]) %}
   --exclude={{ sync_exclude }} \
-{% endfor %}
-{% if sync.send_options | default(syncoid_send_options) | default(False) %}
+{%  endfor %}
+{%  if sync.send_options | default(syncoid_send_options) | default(False) %}
   --sendoptions={{ sync.send_options | default(syncoid_send_options) }} \
-{% endif %}
-{% if sync.recv_options | default(syncoid_recv_options) | default(False) %}
+{%  endif %}
+{%  if sync.recv_options | default(syncoid_recv_options) | default(False) %}
   --recvoptions={{ sync.recv_options | default(syncoid_recv_options) }} \
-{% endif %}
-{% if sync.no_privilege_escalation | default(False) %}
+{%  endif %}
+{%  if sync.no_privilege_escalation | default(False) %}
   --no-privilege-escalation \
-{% endif %}
-{% if sync.no_resume | default(False) %}
+{%  endif %}
+{%  if sync.no_resume | default(False) %}
   --no-resume \
-{% endif %}
-{% if sync.no_clone_handling | default(False) %}
+{%  endif %}
+{%  if sync.no_clone_handling | default(False) %}
   --no-clone-handling \
-{% endif %}
-{% if syncoid_use_ssh_key | default(False) %}
+{%  endif %}
+{%  if syncoid_use_ssh_key | default(False) %}
   --sshkey {{ syncoid_ssh_key }} \
-{% endif %}
-{% if sync.src_host | default('') %}
+{%  endif %}
+{%  if sync.src_host | default('') %}
   {{ sync.src_user | default('root') }}@{{ sync.src_host }}:{{ sync.src | mandatory }} \
-{% else %}
+{%  else %}
   {{ sync.src }} \
-{% endif %}
-{% if sync.dest_host | default('') %}
+{%  endif %}
+{%  if sync.dest_host | default('') %}
   {{ sync.dest_user | default('root') }}@{{ sync.dest_host }}:{{ sync.dest | mandatory }}
-{% else %}
+{%  else %}
   {{ sync.dest }}
-{% endif %}
+{%  endif %}
 {% endfor %}
 {% if syncoid_service_pre_start is defined and syncoid_service_pre_start %}
 {%  for exec in syncoid_service_pre_start %}
