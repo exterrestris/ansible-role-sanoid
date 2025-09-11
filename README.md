@@ -31,6 +31,8 @@ In order for Syncoid to replicate to a remote host, you must ensure that SSH acc
 | `sanoid_datasets` | `[]` | List of datasets to snapshot |
 | `sanoid_templates` | Example templates from [sanoid.conf](https://github.com/jimsalterjrs/sanoid/blob/master/sanoid.conf) | List of policy templates |
 | `syncoid_syncs` | `[]` | List of datasets to replicate |
+| `syncoid_send_options` | `''` | Default additional options to pass to the zfs send command via `syncoid --sendoptions` |
+| `syncoid_recv_options` | `''` | Default additional options to pass to the zfs recieve command via `syncoid --recvoptions` |
 
 #### `sanoid_templates[]`
 | Variable | Default | Comments |
@@ -61,6 +63,8 @@ Similarly, most [Syncoid flags](https://github.com/jimsalterjrs/sanoid/wiki/Sync
 | `dest_user` | `"root"` | Destination user. Ignored if `dest_host` empty |
 | `recursive` | `"no"` | Copy child datasets |
 | `force_delete` | `"no"` | Remove destination datasets recursively |
+| `send_options` | `''` | Additional options to pass to the zfs send command via `syncoid --sendoptions` |
+| `recv_options` | `''` | Additional options to pass to the zfs recieve command via `syncoid --recvoptions` |
 
 ### Sanoid systemd Settings
 | Variable | Default | Comments |
@@ -82,6 +86,7 @@ Similarly, most [Syncoid flags](https://github.com/jimsalterjrs/sanoid/wiki/Sync
 | `syncoid_generated_ssh_key` | `id_syncoid` | Name of generated SSH key |
 | `syncoid_ssh_key` | `/root/.ssh/{`*`syncoid_generated_ssh_key`*`\|id_rsa}` | Path to SSH key for Syncoid to use |
 | `syncoid_ssh_key_install_remote` | `yes` | Install specified SSH key on remote hosts. Requires remote hosts to be defined in inventory |
+| `syncoid_update_known_hosts` | `yes` | Update known_hosts with src/destination host public keys. |
 
 
 ## Example
