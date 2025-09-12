@@ -12,7 +12,7 @@
         dest: "/etc/systemd/system/{{ systemd_service_name }}.d/{{ systemd_service_override_name }}.conf"
         owner: root
         group: root
-        mode: '0700'
+        mode: '0644'
       notify: reload systemd
   when:
     - systemd_service_overrides is not none
