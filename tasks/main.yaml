@@ -95,14 +95,64 @@
             - "{{ syncoid_syncs }}"
       when: syncoid_update_known_hosts
 
-    - name: set up syncoid systemd service
+    - name: set up syncoid systemd target, timer and services
       block:
-        - name: set up syncoid systemd service
-          import_tasks: "systemd-add.yaml"
+        - name: compile syncoid service names
+          ansible.builtin.set_fact:
+            syncoid_sync_names: >-
+              {{ syncoid_sync_names + [ item.name | default(item | to_json | hash('md5')) ] }}
+            syncoid_service_names: >-
+              {{ syncoid_service_names + [ syncoid_service_name ~ '-' ~ item.name | default(item | to_json | hash('md5')) ] }}
+          vars:
+            syncoid_sync_names: []
+            syncoid_service_names: []
+          loop: "{{ syncoid_syncs | flatten }}"
+
+        - name: get current syncoid services
+          ansible.builtin.systemd:
+            name: "{{ syncoid_service_name }}.target"
+          register: syncoid_target
+
+        - name: compile current syncoid service names
+          ansible.builtin.set_fact:
+            syncoid_current_service_names: "{{ syncoid_target.status.Wants | default('') | split(' ') | map('replace', '.service', '') }}"
+
+        - name: compile syncoid services to remove
+          ansible.builtin.set_fact:
+            syncoid_unused_service_names: "{{ syncoid_current_service_names | difference(syncoid_service_names) }}"
+
+        - name: update syncoid systemd sync services
+          ansible.builtin.include_tasks: "systemd-add.yaml"
+          vars:
+            systemd_service_name: "{{ item.1 }}"
+            systemd_service_template: syncoid.service.j2
+            syncoid_sync_name: "{{ item.0 }}"
+            syncoid_sync: "{{ item.2 }}"
+            syncoid_after_services: "{{ syncoid_service_names[:idx] }}"
+          loop: "{{ syncoid_sync_names | zip(syncoid_service_names, syncoid_syncs) | list }}"
+          loop_control:
+            label: "{{ item.0 }}"
+            index_var: idx
+
+        - name: remove unused syncoid sync services
+          ansible.builtin.include_tasks: "systemd-remove.yaml"
+          vars:
+            systemd_service_name: "{{ item }}"
+          loop: "{{ syncoid_unused_service_names }}"
+
+        - name: remove syncoid service unit if present
+          ansible.builtin.include_tasks: "systemd-remove.yaml"
           vars:
             systemd_service_name: "{{ syncoid_service_name }}"
-            systemd_service_template: syncoid.service.j2
+            systemd_remove_timer: false
+
+        - name: set up syncoid target and timer
+          ansible.builtin.include_tasks: "systemd-add.yaml"
+          vars:
+            systemd_service_name: "{{ syncoid_service_name }}"
+            systemd_target_template: syncoid.target.j2
             systemd_timer_template: syncoid.timer.j2
+
         - name: enable syncoid timer
           ansible.builtin.systemd:
             name: "{{ syncoid_service_name }}.timer"
@@ -115,7 +165,33 @@
     - syncoid_syncs | length > 0
 
 - name: remove syncoid service
-  import_tasks: "systemd-remove.yaml"
-  vars:
-    systemd_service_name: "{{ syncoid_service_name }}"
+  block:
+    - name: get current syncoid services
+      ansible.builtin.systemd:
+        name: "{{ syncoid_service_name }}.target"
+      register: syncoid_target
+
+    - name: compile current syncoid service names
+      ansible.builtin.set_fact:
+        syncoid_unused_service_names: "{{ syncoid_target.status.Wants | default('') | split(' ') | map('replace', '.service', '') }}"
+
+    - name: disable syncoid timer
+      ansible.builtin.systemd:
+        name: "{{ syncoid_service_name }}.timer"
+        state: started
+        enabled: false
+        masked: no
+      notify: reload systemd
+
+    - name: remove syncoid systemd sync services
+      ansible.builtin.include_tasks: "systemd-remove.yaml"
+      vars:
+        systemd_service_name: "{{ item }}"
+      loop: "{{ syncoid_unused_service_names }}"
+
+    - name: remove syncoid service
+      ansible.builtin.include_tasks: "systemd-remove.yaml"
+      vars:
+        systemd_service_name: "{{ syncoid_service_name }}"
+        systemd_service_type: target
   when: (syncoid_syncs is none) or (syncoid_syncs | length == 0)
