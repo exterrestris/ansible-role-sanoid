@@ -5,9 +5,15 @@
     - "{{ ansible_distribution }}-{{ ansible_distribution_major_version}}.yaml"
     - "{{ ansible_distribution }}.yaml"
     - "{{ ansible_os_family }}.yaml"
+  tags:
+    - sanoid
+    - syncoid
 
 - name: include install tasks
   ansible.builtin.include_tasks: "install-{{ sanoid_install_from }}.yaml"
+  tags:
+    - sanoid
+    - syncoid
 
 - name: create config directory
   ansible.builtin.file:
@@ -15,6 +21,8 @@
     state: directory
     owner: root
     group: root
+  tags:
+    - sanoid
 
 - name: generate sanoid config
   ansible.builtin.template:
@@ -23,12 +31,16 @@
     owner: root
     group: root
     mode: '0600'
+  tags:
+    - sanoid
 
 - name: enable sanoid prune service
   ansible.builtin.systemd:
     name: sanoid-prune.service
     masked: no
     enabled: "{{ sanoid_prune_service_enabled }}"
+  tags:
+    - sanoid
 
 - name: enable sanoid timer
   ansible.builtin.systemd:
@@ -36,6 +48,8 @@
     state: started
     masked: no
     enabled: "{{ sanoid_timer_enabled }}"
+  tags:
+    - sanoid
 
 - name: configure syncoid service
   block:
@@ -169,6 +183,8 @@
   when:
     - syncoid_syncs is not none
     - syncoid_syncs | length > 0
+  tags:
+    - syncoid
 
 - name: remove syncoid service
   block:
@@ -201,3 +217,5 @@
         systemd_service_name: "{{ syncoid_service_name }}"
         systemd_service_type: target
   when: (syncoid_syncs is none) or (syncoid_syncs | length == 0)
+  tags:
+    - syncoid
