@@ -113,3 +113,15 @@ syncoid_ssh_key_install_remote: yes
 # Update known hosts
 syncoid_update_known_hosts: yes
 
+### Healthchecks
+## Installation
+syncoid_healthchecks_install_runitor: false
+
+# Github Repo URL
+syncoid_healthchecks_runitor_github_url: https://github.com/bdd/runitor
+
+# Install directory
+syncoid_healthchecks_runitor_install_dir: /usr/local/sbin
+
+## Config
+syncoid_healthchecks_api_url: ''

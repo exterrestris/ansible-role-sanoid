@@ -95,6 +95,12 @@
             - "{{ syncoid_syncs }}"
       when: syncoid_update_known_hosts
 
+    - name: install runitor
+      ansible.builtin.include_tasks: "install-runitor.yaml"
+      when:
+        - syncoid_healthchecks_install_runitor
+        - syncoid_syncs | selectattr('healthchecks', 'defined') | list | length > 0
+
     - name: set up syncoid systemd target, timer and services
       block:
         - name: compile syncoid service names

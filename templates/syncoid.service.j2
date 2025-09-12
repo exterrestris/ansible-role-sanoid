@@ -1,3 +1,11 @@
+{%- macro healthcheck(sync) -%}
+{%-  if sync.healthchecks is defined -%}
+{{ syncoid_healthchecks_runitor_binary }} -create -- {{ syncoid_path | default(syncoid_bin_path) }} \
+{%-  else -%}
+{{ syncoid_path | default(syncoid_bin_path) }} \
+{%-  endif -%}
+{%- endmacro -%}
+
 [Unit]
 Description=Replicate sanoid {{ syncoid_sync_name }} snapshots
 Requires=zfs.target
@@ -5,7 +13,12 @@ After=zfs.target {{ syncoid_after_services | map('regex_replace', '$', '.service
 
 [Service]
 Type=oneshot
-ExecStart={{ syncoid_path | default(syncoid_bin_path) }} \
+{% if syncoid_sync.healthchecks is defined %}
+Environment="HC_API_URL={{ syncoid_sync.healthchecks.api_url | default(syncoid_healthchecks_api_url) | default('https://hc-ping.com') }}"
+Environment="PING_KEY={{ syncoid_sync.healthchecks.ping_key | default(syncoid_healthchecks_ping_key) }}"
+Environment="CHECK_SLUG={{ syncoid_sync.healthchecks.slug }}"
+{% endif %}
+ExecStart={{ healthcheck(syncoid_sync) }}
 {%  if syncoid_sync.identifier | default('') %}
   --identifier={{ syncoid_sync.identifier }} \
 {% endif %}

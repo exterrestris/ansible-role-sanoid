@@ -1,0 +1,24 @@
+---
+- become: false
+  delegate_to: localhost
+  run_once: true
+  block:
+  - name: get latest release version from GitHub
+    ansible.builtin.uri:
+      url: "{{ syncoid_healthchecks_runitor_github_url }}/releases/latest"
+    register: syncoid_healthchecks_runitor_github_release_page
+  - name: Set version and download URL facts
+    set_fact:
+      syncoid_healthchecks_runitor_version: "{{ syncoid_healthchecks_runitor_github_release_page['url'].split('/')[-1] }}"
+      syncoid_healthchecks_runitor_download_base_url: "{{ syncoid_healthchecks_runitor_github_release_page['url'].replace('/tag/', '/download/') }}"
+
+- name: download binary from GitHub
+  ansible.builtin.get_url:
+    url: "{{ syncoid_healthchecks_runitor_download_base_url }}/runitor-{{ syncoid_healthchecks_runitor_version }}-linux-amd64"
+    # checksum: "sha256:{{ syncoid_healthchecks_runitor_download_base_url }}/SHA256"
+    dest: "{{ syncoid_healthchecks_runitor_install_dir }}/runitor"
+    mode: '0700'
+
+- name: set path to binary
+  set_fact:
+    syncoid_healthchecks_runitor_binary: "{{ syncoid_healthchecks_runitor_install_dir }}/runitor"
