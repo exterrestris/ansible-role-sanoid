@@ -98,15 +98,17 @@ ExecStart={{ healthcheck(syncoid_sync) }}
 {% else %}
   {{ syncoid_sync.dest }}
 {% endif %}
-{% if syncoid_service_pre_start is defined and syncoid_service_pre_start %}
-{%  for exec in syncoid_service_pre_start %}
+{% if syncoid_sync.systemd is defined %}
+{%  if syncoid_sync.systemd.pre_start is defined and syncoid_sync.systemd.pre_start %}
+{%   for exec in syncoid_sync.systemd.pre_start %}
 ExecStartPre={{ exec }}
-{%  endfor %}
-{% endif %}
-{% if syncoid_service_post_start is defined and syncoid_service_post_start %}
-{%  for exec in syncoid_service_post_start %}
+{%   endfor %}
+{%  endif %}
+{%  if syncoid_sync.systemd.post_start is defined and syncoid_sync.systemd.post_start %}
+{%   for exec in syncoid_sync.systemd.post_start %}
 ExecStartPost={{ exec }}
-{%  endfor %}
+{%   endfor %}
+{%  endif %}
 {% endif %}
 
 [Install]
