@@ -1,0 +1,15 @@
+[Unit]
+Description=Replicate sanoid snapshots
+Requires=zfs.target
+After=zfs.target
+{# Wants are explicitly listed here to allow cleanup when removing services, as ansible.builtin.systemd
+   cannot detect the implicit Wants created by the WantedBy declarations in the unit files #}
+Wants={{ syncoid_service_names | map('regex_replace', '$', '.service') | join(' ') }}
+StopWhenUnneeded=true
+
+[Install]
+WantedBy={{ syncoid_service_name }}.timer
+Also={{ syncoid_service_name }}.timer
+{% for syncoid_sync_service in syncoid_service_names %}
+Also={{ syncoid_sync_service }}.service
+{% endfor %}

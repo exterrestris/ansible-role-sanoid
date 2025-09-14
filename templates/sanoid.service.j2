@@ -10,3 +10,13 @@ ConditionFileNotEmpty={{ sanoid_conf }}
 Environment=TZ=UTC
 Type=oneshot
 ExecStart={{ sanoid_path | default(sanoid_bin_path) }} --take-snapshots --verbose
+{% if sanoid_service_pre_start is defined and sanoid_service_pre_start %}
+{%  for exec in sanoid_service_pre_start %}
+ExecStartPre={{ exec }}
+{%  endfor %}
+{% endif %}
+{% if sanoid_service_post_start is defined and sanoid_service_post_start %}
+{%  for exec in sanoid_service_post_start %}
+ExecStartPost={{ exec }}
+{%  endfor %}
+{% endif %}

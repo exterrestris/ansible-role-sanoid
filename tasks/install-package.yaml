@@ -5,3 +5,35 @@
     name: sanoid
     state: present
     update_cache: true
+
+- name: update sanoid-prune systemd service pre start overrides
+  ansible.builtin.include_tasks: "systemd-override.yaml"
+  vars:
+    systemd_service_name: sanoid-prune
+    systemd_service_override_name: pre-start
+    systemd_service_override_type: ExecPreStart
+    systemd_service_overrides: "{{ sanoid_prune_service_pre_start }}"
+
+- name: update sanoid-prune systemd service post start overrides
+  ansible.builtin.include_tasks: "systemd-override.yaml"
+  vars:
+    systemd_service_name: sanoid-prune
+    systemd_service_override_name: post-start
+    systemd_service_override_type: ExecPostStart
+    systemd_service_overrides: "{{ sanoid_prune_service_post_start }}"
+
+- name: update sanoid systemd service pre start overrides
+  ansible.builtin.include_tasks: "systemd-override.yaml"
+  vars:
+    systemd_service_name: sanoid
+    systemd_service_override_name: pre-start
+    systemd_service_override_type: ExecPreStart
+    systemd_service_overrides: "{{ sanoid_service_pre_start }}"
+
+- name: update sanoid systemd service post start overrides
+  ansible.builtin.include_tasks: "systemd-override.yaml"
+  vars:
+    systemd_service_name: sanoid
+    systemd_service_override_name: post-start
+    systemd_service_override_type: ExecPostStart
+    systemd_service_overrides: "{{ sanoid_service_post_start }}"

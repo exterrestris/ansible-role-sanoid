@@ -4,6 +4,7 @@ Description=Run Syncoid {{ syncoid_timer_frequency }}
 [Timer]
 OnCalendar={{ syncoid_timer_frequency }}
 Persistent=true
+Unit={{ syncoid_service_name }}.target
 
 [Install]
 WantedBy=timers.target

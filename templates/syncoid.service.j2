@@ -1,90 +1,115 @@
+{%- macro healthcheck(sync) -%}
+{%-  if sync.healthchecks is defined -%}
+{{ syncoid_healthchecks_runitor_binary }} -create -- {{ syncoid_path | default(syncoid_bin_path) }} \
+{%-  else -%}
+{{ syncoid_path | default(syncoid_bin_path) }} \
+{%-  endif -%}
+{%- endmacro -%}
+
 [Unit]
-Description=Replicate sanoid snapshots
+Description=Replicate sanoid {{ syncoid_sync_name }} snapshots
 Requires=zfs.target
-After=zfs.target
+After=zfs.target {{ syncoid_after_services | map('regex_replace', '$', '.service') | join(' ') }}
 
 [Service]
 Type=oneshot
-{% for sync in syncoid_syncs %}
-ExecStart={{ syncoid_path | default(syncoid_bin_path) }} \
-{% if sync.identifier | default('') %}
-  --identifier={{ sync.identifier }} \
+{% if syncoid_sync.healthchecks is defined %}
+Environment="HC_API_URL={{ syncoid_sync.healthchecks.api_url | default(syncoid_healthchecks_api_url) }}"
+Environment="PING_KEY={{ syncoid_sync.healthchecks.ping_key | default(syncoid_healthchecks_ping_key) }}"
+Environment="CHECK_SLUG={{ syncoid_sync.healthchecks.slug }}"
 {% endif %}
-{% if sync.force_delete | default(False) %}
+ExecStart={{ healthcheck(syncoid_sync) }}
+{%  if syncoid_sync.identifier | default('') %}
+  --identifier={{ syncoid_sync.identifier }} \
+{% endif %}
+{% if syncoid_sync.force_delete | default(False) %}
   --force-delete \
 {% endif %}
-{% if sync.recursive | default(False) %}
+{% if syncoid_sync.recursive | default(False) %}
   --recursive \
-{% if sync.skip_parent | default(False) %}
+{%  if syncoid_sync.skip_parent | default(False) %}
   --skip-parent \ {# only relevant if --recursive #}
+{%  endif %}
 {% endif %}
+{% if syncoid_sync.compress | default('') %}
+  --compress={{ syncoid_sync.compress }} \
 {% endif %}
-{% if sync.compress | default('') %}
-  --compress={{ sync.compress }} \
+{% if syncoid_sync.source_bwlimit | default('') %}
+  --source-bwlimit={{ syncoid_sync.source_bwlimit }} \
 {% endif %}
-{% if sync.source_bwlimit | default('') %}
-  --source-bwlimit={{ sync.source_bwlimit }} \
+{% if syncoid_sync.target_bwlimit | default('') %}
+  --target-bwlimit={{ syncoid_sync.target_bwlimit }} \
 {% endif %}
-{% if sync.target_bwlimit | default('') %}
-  --target-bwlimit={{ sync.target_bwlimit }} \
+{% if syncoid_sync.mbuffer_size | default('') %}
+  --mbuffer-size={{ syncoid_sync.mbuffer_size }} \
 {% endif %}
-{% if sync.mbuffer_size | default('') %}
-  --mbuffer-size={{ sync.mbuffer_size }} \
+{% if syncoid_sync.pv_options | default('') %}
+  --pv-options={{ syncoid_sync.pv_options }} \
 {% endif %}
-{% if sync.pv_options | default('') %}
-  --pv-options={{ sync.pv_options }} \
-{% endif %}
-{% if sync.no_stream | default(False) %}
+{% if syncoid_sync.no_stream | default(False) %}
   --no-stream \
 {% endif %}
-{% if sync.no_sync_snap | default(False) %}
+{% if syncoid_sync.no_sync_snap | default(False) %}
   --no-sync-snap \
-{% if sync.create_bookmark | default(False) %}
+{%  if syncoid_sync.create_bookmark | default(False) %}
   --create-bookmark \
+{%  endif %}
 {% endif %}
-{% endif %}
-{% if sync.keep_sync_snap | default(False) %}
+{% if syncoid_sync.keep_sync_snap | default(False) %}
   --keep-sync-snap \
 {% endif %}
-{% if sync.preserve_recordsize | default(True) %}
+{% if syncoid_sync.preserve_recordsize | default(True) %}
   --preserve-recordsize \
 {% endif %}
-{% if sync.no_clone_rollback | default(False) %}
+{% if syncoid_sync.no_clone_rollback | default(False) %}
   --no-clone-rollback \
 {% endif %}
-{% if sync.no_rollback | default(False) %}
+{% if syncoid_sync.no_rollback | default(False) %}
   --no-rollback \
 {% endif %}
-{% for sync_exclude in sync.exclude | default([]) %}
-  --exclude={{ sync_exclude }}
+{% for sync_exclude in syncoid_sync.exclude | default([]) %}
+  --exclude={{ sync_exclude }} \
 {% endfor %}
-{% if sync.send_options | default(syncoid_send_options) | default(False) %}
-  --sendoptions={{ sync.send_options | default(syncoid_send_options) }} \
+{% if syncoid_sync.send_options | default(syncoid_send_options) | default(False) %}
+  --sendoptions={{ syncoid_sync.send_options | default(syncoid_send_options) }} \
 {% endif %}
-{% if sync.recv_options | default(syncoid_recv_options) | default(False) %}
-  --recvoptions={{ sync.recv_options | default(syncoid_recv_options) }} \
+{% if syncoid_sync.recv_options | default(syncoid_recv_options) | default(False) %}
+  --recvoptions={{ syncoid_sync.recv_options | default(syncoid_recv_options) }} \
 {% endif %}
-{% if sync.no_privilege_escalation | default(False) %}
+{% if syncoid_sync.no_privilege_escalation | default(False) %}
   --no-privilege-escalation \
 {% endif %}
-{% if sync.no_resume | default(False) %}
+{% if syncoid_sync.no_resume | default(False) %}
   --no-resume \
 {% endif %}
-{% if sync.no_clone_handling | default(False) %}
+{% if syncoid_sync.no_clone_handling | default(False) %}
   --no-clone-handling \
 {% endif %}
-
 {% if syncoid_use_ssh_key | default(False) %}
   --sshkey {{ syncoid_ssh_key }} \
 {% endif %}
-{% if sync.src_host | default('') %}
-  {{ sync.src_user | default('root') }}@{{ sync.src_host }}:{{ sync.src | mandatory }} \
+{% if syncoid_sync.src_host | default('') %}
+  {{ syncoid_sync.src_user | default('root') }}@{{ syncoid_sync.src_host }}:{{ syncoid_sync.src | mandatory }} \
 {% else %}
-  {{ sync.src }} \
+  {{ syncoid_sync.src }} \
 {% endif %}
-{% if sync.dest_host | default('') %}
-  {{ sync.dest_user | default('root') }}@{{ sync.dest_host }}:{{ sync.dest | mandatory }}
+{% if syncoid_sync.dest_host | default('') %}
+  {{ syncoid_sync.dest_user | default('root') }}@{{ syncoid_sync.dest_host }}:{{ syncoid_sync.dest | mandatory }}
 {% else %}
-  {{ sync.dest }}
+  {{ syncoid_sync.dest }}
 {% endif %}
-{% endfor %}
+{% if syncoid_sync.systemd is defined %}
+{%  if syncoid_sync.systemd.pre_start is defined and syncoid_sync.systemd.pre_start %}
+{%   for exec in syncoid_sync.systemd.pre_start %}
+ExecStartPre={{ exec }}
+{%   endfor %}
+{%  endif %}
+{%  if syncoid_sync.systemd.post_start is defined and syncoid_sync.systemd.post_start %}
+{%   for exec in syncoid_sync.systemd.post_start %}
+ExecStartPost={{ exec }}
+{%   endfor %}
+{%  endif %}
+{% endif %}
+
+[Install]
+WantedBy={{ syncoid_service_name }}.target
