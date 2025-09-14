@@ -14,7 +14,7 @@ After=zfs.target {{ syncoid_after_services | map('regex_replace', '$', '.service
 [Service]
 Type=oneshot
 {% if syncoid_sync.healthchecks is defined %}
-Environment="HC_API_URL={{ syncoid_sync.healthchecks.api_url | default(syncoid_healthchecks_api_url) | default('https://hc-ping.com') }}"
+Environment="HC_API_URL={{ syncoid_sync.healthchecks.api_url | default(syncoid_healthchecks_api_url) }}"
 Environment="PING_KEY={{ syncoid_sync.healthchecks.ping_key | default(syncoid_healthchecks_ping_key) }}"
 Environment="CHECK_SLUG={{ syncoid_sync.healthchecks.slug }}"
 {% endif %}

@@ -124,4 +124,4 @@ syncoid_healthchecks_runitor_github_url: https://github.com/bdd/runitor
 syncoid_healthchecks_runitor_install_dir: /usr/local/sbin
 
 ## Config
-syncoid_healthchecks_api_url: ''
+syncoid_healthchecks_api_url: 'https://hc-ping.com'
