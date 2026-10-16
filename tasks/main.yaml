@@ -70,7 +70,7 @@
             user: "{{ item.dest_user | default('root') }}"
             state: present
             key: "{{ user_info.ssh_public_key if syncoid_generate_ssh_key else lookup('file', syncoid_ssh_key) }}"
-          delegate_to: "{{ item.dest_host }}"
+          delegate_to: "{{ item.dest_host | default(omit) }}"
           when: item.dest_host is defined
           with_items:
             - "{{ syncoid_syncs }}"
@@ -80,7 +80,7 @@
             user: "{{ item.src_user | default('root') }}"
             state: present
             key: "{{ user_info.ssh_public_key if syncoid_generate_ssh_key else lookup('file', syncoid_ssh_key) }}"
-          delegate_to: "{{ item.src_host }}"
+          delegate_to: "{{ item.src_host | default(omit) }}"
           when: item.src_host is defined
           with_items:
             - "{{ syncoid_syncs }}"
