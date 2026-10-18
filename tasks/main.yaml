@@ -204,6 +204,9 @@
         enabled: false
         masked: no
       notify: reload systemd
+      when: >
+        ansible_facts.services is defined and
+        ('{{ syncoid_service_name | default('') }}.timer' in ansible_facts.services.keys())
 
     - name: remove syncoid systemd sync services
       ansible.builtin.include_tasks: "systemd-remove.yaml"
