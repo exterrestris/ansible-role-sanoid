@@ -58,6 +58,9 @@ ExecStart={{ healthcheck(syncoid_sync) }}
 {% if syncoid_sync.keep_sync_snap | default(False) %}
   --keep-sync-snap \
 {% endif %}
+{% if syncoid_sync.delete_target_snapshots | default(False) %}
+  --delete-target-snapshots \
+{% endif %}
 {% if syncoid_sync.preserve_recordsize | default(True) %}
   --preserve-recordsize \
 {% endif %}
